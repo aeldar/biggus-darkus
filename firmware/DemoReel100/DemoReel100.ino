@@ -6,6 +6,16 @@
 
 #include <FastLED.h>
 
+//YWROBOT
+//Compatible with the Arduino IDE 1.0
+//Library version:1.1
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
+
+// Digit Displays
+#include <TM1637TinyDisplay.h>
+#include <TM1637TinyDisplay6.h>
+
 // FastLED "100-lines-of-code" demo reel, showing just a few 
 // of the kinds of animation patterns you can quickly and easily 
 // compose using FastLED.  
@@ -26,7 +36,49 @@ CRGB leds[NUM_LEDS];
 #define BRIGHTNESS          96
 #define FRAMES_PER_SECOND  120
 
+#define CLK_4_DIGIT 2
+#define DIO_4_DIGIT 3
+#define CLK_6_DIGIT 6
+#define DIO_6_DIGIT 7
+
+// LCD Display
+LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+
+// Digits Displays
+TM1637TinyDisplay  clockDisplay(CLK_4_DIGIT, DIO_4_DIGIT);  // 4 digits with colon
+TM1637TinyDisplay6 bigDisplay(CLK_6_DIGIT, DIO_6_DIGIT);    // 6 digits
+
+void initLcd() {
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print("Hello, World!");
+  lcd.setCursor(0, 1);
+  lcd.print("LCD1602 via I2C");
+}
+
+void initDigitDisplay() {
+  clockDisplay.begin();
+  bigDisplay.begin();
+  clockDisplay.setBrightness(3);
+  bigDisplay.setBrightness(3);
+}
+
+void loopDigitDisplay() {
+  static long n = 0;
+
+  // 12:34 with the colon on
+  clockDisplay.showNumberDec(1234, 0b01000000, true);
+
+  bigDisplay.showNumber(n++);
+  delay(100);
+}
+
 void setup() {
+  initLcd();
+
+  initDigitDisplay();
+
   delay(3000); // 3 second delay for recovery
   
   // tell FastLED about the LED strip configuration
@@ -67,6 +119,9 @@ void loop()
   // do some periodic updates
   EVERY_N_MILLISECONDS( 20 ) { gHue++; } // slowly cycle the "base color" through the rainbow
   EVERY_N_SECONDS( 10 ) { nextPattern(); } // change patterns periodically
+
+
+  loopDigitDisplay();
 }
 
 #define ARRAY_SIZE(A) (sizeof(A) / sizeof((A)[0]))
