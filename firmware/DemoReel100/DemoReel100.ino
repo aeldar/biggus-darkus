@@ -66,12 +66,16 @@ void initDigitDisplay() {
 
 void loopDigitDisplay() {
   static long n = 0;
+  static uint32_t lastUpdate = 0;
+
+  // non-blocking: delay() here would stall the LED animation loop too
+  if (millis() - lastUpdate < 100) return;
+  lastUpdate = millis();
 
   // 12:34 with the colon on
   clockDisplay.showNumberDec(1234, 0b01000000, true);
 
   bigDisplay.showNumber(n++);
-  delay(100);
 }
 
 void setup() {
