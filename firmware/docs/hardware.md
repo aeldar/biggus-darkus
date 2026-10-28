@@ -29,12 +29,25 @@ firmware never names those pins because `Wire` selects them.
   `setMaxPowerInVoltsAndMilliamps(5, 400)`. The cap is a per-frame dimmer, not a
   fuse: frames estimated above it are scaled down until they fit, so the brightest
   patterns run visibly dimmer than sparse ones.
-- 400 mA keeps a USB-only run inside the port's 500 mA budget once the Nano, LCD
-  backlight and both TM1637 modules are counted in (~470 mA total). It is well
-  below what the external 5 V supply can deliver, so it costs headroom there.
 - Master brightness `60` of 255 — deliberately low to save energy.
 - The strip needs its own 5 V supply with a shared ground for full output; the Nano
   only drives the data line.
+
+## Power supply
+
+Deliberately not part of the design — any 5 V USB supply works, currently an old
+2 A phone charger. Because the weakest source you might plug in is a plain USB port
+(500 mA), `MAX_CURRENT` is set low enough to be safe everywhere:
+
+| Source | Budget | Notes |
+|---|---|---|
+| USB port via the Nano | 500 mA | `MAX_CURRENT` 400 + ~70 mA board and displays ≈ 470 mA |
+| Any 5 V charger, 1 A | ~930 mA usable | cap leaves most of it unused |
+| Current 2 A charger | ~1930 mA usable | same |
+
+If a dedicated supply ever becomes part of the build, raise `MAX_CURRENT` to its
+rating minus ~70 mA of overhead — or keep 400 and accept the dimming, since
+brightness is already sufficient.
 
 ## Displays
 
@@ -59,7 +72,7 @@ firmware never names those pins because `Wire` selects them.
 
 Unknown at the moment — fill these in when the build is fixed:
 
-- Power supply rating, fusing, and whether the strip has power injection.
+- Fusing and whether the strip has power injection.
 - Connectors, wire colours, and cable lengths.
 - Any series resistor or level shifter on the LED data line.
 - Enclosure and physical mounting.
