@@ -1,6 +1,6 @@
 /// @file    pins.h
-/// @brief   Board wiring. The only place pin assignments live: firmware and
-///          docs/hardware.md both point here.
+/// @brief   Board wiring for the Arduino Nano. The only place pin assignments
+///          live: firmware and docs/hardware.md both point here.
 
 #pragma once
 

@@ -3,6 +3,12 @@
 Pin assignments live in [`BiggusDarkus/pins.h`](../BiggusDarkus/pins.h) — that file is the
 source of truth. Update it first, then this page.
 
+## Board
+
+Arduino Nano — 5 V logic, so the strip and both TM1637 modules run at the same
+level and need no shifters. Its I²C bus is fixed to A4 (SDA) and A5 (SCL); the
+firmware never names those pins because `Wire` selects them.
+
 ## Signals
 
 | Signal | MCU pin | Connects to | Notes |
@@ -13,7 +19,8 @@ source of truth. Update it first, then this page.
 | Clock display DIO | `6` (`PIN_DIO_4DIG`) | 4-digit TM1637 | |
 | Counter display CLK | `7` (`PIN_CLK_6DIG`) | 6-digit TM1637 | |
 | Counter display DIO | `8` (`PIN_DIO_6DIG`) | 6-digit TM1637 | |
-| LCD SDA/SCL | board default | 16×2 I²C backpack | Address `0x27` (`LCD_I2C_ADDR`) |
+| LCD SDA | `A4` | 16×2 I²C backpack | Address `0x27` (`LCD_I2C_ADDR`) |
+| LCD SCL | `A5` | 16×2 I²C backpack | Same bus as above |
 
 ## LED strip
 
@@ -22,6 +29,8 @@ source of truth. Update it first, then this page.
   `setMaxPowerInVoltsAndMilliamps(5, 1000)`, so FastLED dims the strip rather than
   overdrawing the supply.
 - Master brightness `60` of 255 — deliberately low to save energy.
+- The 1000 mA cap is far above what the Nano's 5 V pin can pass, so the strip needs
+  its own 5 V supply with a shared ground; the Nano only drives the data line.
 
 ## Displays
 
@@ -44,7 +53,6 @@ source of truth. Update it first, then this page.
 
 Unknown at the moment — fill these in when the build is fixed:
 
-- Exact MCU board and how its I²C pins are broken out.
 - Power supply rating, fusing, and whether the strip has power injection.
 - Connectors, wire colours, and cable lengths.
 - Any series resistor or level shifter on the LED data line.
