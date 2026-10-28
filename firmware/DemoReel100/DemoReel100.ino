@@ -6,6 +6,8 @@
 
 #include <FastLED.h>
 
+#include "pins.h"
+
 //YWROBOT
 //Compatible with the Arduino IDE 1.0
 //Library version:1.1
@@ -26,7 +28,6 @@
 // -Mark Kriegsman, December 2014
 
 
-#define DATA_PIN    4
 #define LED_TYPE    WS2811
 #define COLOR_ORDER GRB
 #define NUM_LEDS    23 * 2
@@ -36,17 +37,12 @@ CRGB leds[NUM_LEDS];
 #define FRAMES_PER_SECOND  120
 #define MAX_CURRENT       1000  // mA, keep current low for the strip to prevent outpower
 
-#define CLK_4_DIGIT 5
-#define DIO_4_DIGIT 6
-#define CLK_6_DIGIT 7
-#define DIO_6_DIGIT 8
-
 // LCD Display
-LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+LiquidCrystal_I2C lcd(LCD_I2C_ADDR,16,2);  // 16 chars and 2 line display
 
 // Digits Displays
-TM1637TinyDisplay  clockDisplay(CLK_4_DIGIT, DIO_4_DIGIT);  // 4 digits with colon
-TM1637TinyDisplay6 bigDisplay(CLK_6_DIGIT, DIO_6_DIGIT);    // 6 digits
+TM1637TinyDisplay  clockDisplay(PIN_CLK_4DIG, PIN_DIO_4DIG);  // 4 digits with colon
+TM1637TinyDisplay6 bigDisplay(PIN_CLK_6DIG, PIN_DIO_6DIG);    // 6 digits
 
 void initLcd() {
   lcd.init();
@@ -54,7 +50,6 @@ void initLcd() {
 }
 
 // Button to ground; INPUT_PULLUP keeps the pin HIGH until pressed
-#define BUTTON_PIN A0
 #define DEBOUNCE_MS 50
 
 bool demoOn = true;
@@ -77,7 +72,7 @@ void loopButton() {
   static bool stable = HIGH;
   static uint32_t lastChange = 0;
 
-  bool reading = digitalRead(BUTTON_PIN);
+  bool reading = digitalRead(PIN_BTN);
   if (reading != lastReading) {
     lastReading = reading;
     lastChange = millis();
@@ -144,13 +139,12 @@ void setup() {
 
   initDigitDisplay();
 
-  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  pinMode(PIN_BTN, INPUT_PULLUP);
 
   delay(3000); // 3 second delay for recovery
   
   // tell FastLED about the LED strip configuration
-  FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
-  //FastLED.addLeds<LED_TYPE,DATA_PIN,CLK_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+  FastLED.addLeds<LED_TYPE,PIN_LED_DATA,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
 
   // set master brightness control
   FastLED.setBrightness(BRIGHTNESS);
