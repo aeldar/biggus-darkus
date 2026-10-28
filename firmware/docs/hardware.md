@@ -25,17 +25,23 @@ firmware never names those pins because `Wire` selects them.
 ## LED strip
 
 - Type `WS2811`, colour order `GRB`, 46 pixels (two runs of 23).
-- Powered from 5 V; firmware caps draw at 1000 mA via
-  `setMaxPowerInVoltsAndMilliamps(5, 1000)`, so FastLED dims the strip rather than
-  overdrawing the supply.
+- Powered from 5 V; firmware caps strip draw at 400 mA via
+  `setMaxPowerInVoltsAndMilliamps(5, 400)`. The cap is a per-frame dimmer, not a
+  fuse: frames estimated above it are scaled down until they fit, so the brightest
+  patterns run visibly dimmer than sparse ones.
+- 400 mA keeps a USB-only run inside the port's 500 mA budget once the Nano, LCD
+  backlight and both TM1637 modules are counted in (~470 mA total). It is well
+  below what the external 5 V supply can deliver, so it costs headroom there.
 - Master brightness `60` of 255 — deliberately low to save energy.
-- The 1000 mA cap is far above what the Nano's 5 V pin can pass, so the strip needs
-  its own 5 V supply with a shared ground; the Nano only drives the data line.
+- The strip needs its own 5 V supply with a shared ground for full output; the Nano
+  only drives the data line.
 
 ## Displays
 
 - **LCD** — 16×2 character module on an I²C backpack, address `0x27`. Row 1 shows
   `Demo ON` / `Demo OFF`; row 2 shows measured FPS and estimated strip current in mA.
+  A `>` before the number means the estimate went past `MAX_CURRENT` and the strip is
+  being dimmed to fit; without it, the reading is the true expected draw.
 - **4-digit TM1637** — shows a fixed `12:34` with the colon lit.
 - **6-digit TM1637** — shows a running counter.
 - Both TM1637 displays run at brightness level 3 and refresh at 10 Hz.

@@ -35,7 +35,7 @@ CRGB leds[NUM_LEDS];
 
 #define BRIGHTNESS          60  // keep low to save energy
 #define FRAMES_PER_SECOND  120
-#define MAX_CURRENT       1000  // mA, keep current low for the strip to prevent outpower
+#define MAX_CURRENT       400  // mA, sized to keep USB-only runs inside the 500 mA port limit
 
 // LCD Display
 LiquidCrystal_I2C lcd(LCD_I2C_ADDR,16,2);  // 16 chars and 2 line display
@@ -122,11 +122,13 @@ void loopStats() {
   uint16_t fps = (uint32_t)frames * 1000 / elapsed;
   // the library gives power at full brightness (assuming 5V), so scale it by our brightness
   uint32_t mA = calculate_unscaled_power_mW(leds, NUM_LEDS) / 5 * BRIGHTNESS / 256;
-  if (mA > MAX_CURRENT) mA = MAX_CURRENT;  // FastLED dims the strip to stay under this
+  // above the cap FastLED dims to exactly MAX_CURRENT, so mark the value instead of hiding it
+  bool capped = mA > MAX_CURRENT;
+  if (capped) mA = MAX_CURRENT;
 
   // padded to 16 chars so it overwrites the previous text without clearing the row
   char line[17];
-  snprintf(line, sizeof(line), "FPS%4u %4umA  ", fps, (unsigned)mA);
+  snprintf(line, sizeof(line), "FPS%4u %c%4umA ", fps, capped ? '>' : ' ', (unsigned)mA);
   lcd.setCursor(0, 1);
   lcd.print(line);
 
@@ -149,7 +151,7 @@ void setup() {
   // set master brightness control
   FastLED.setBrightness(BRIGHTNESS);
   // limit current to save energy for a green planet
-  FastLED.setMaxPowerInVoltsAndMilliamps(5, MAX_CURRENT);  // 5V, max 1000 mA
+  FastLED.setMaxPowerInVoltsAndMilliamps(5, MAX_CURRENT);
 
   applyDemoMode();
 }
