@@ -113,6 +113,32 @@ void loopDigitDisplay() {
   bigDisplay.showNumber(n++);
 }
 
+// Shows the real frame rate and estimated strip current on LCD row 2
+void loopStats() {
+  static uint16_t frames = 0;
+  static uint32_t lastUpdate = 0;
+
+  frames++;
+
+  // refresh twice a second: LCD writes are slow and would eat into the frame rate
+  uint32_t elapsed = millis() - lastUpdate;
+  if (elapsed < 500) return;
+
+  uint16_t fps = (uint32_t)frames * 1000 / elapsed;
+  // the library gives power at full brightness (assuming 5V), so scale it by our brightness
+  uint32_t mA = calculate_unscaled_power_mW(leds, NUM_LEDS) / 5 * BRIGHTNESS / 256;
+  if (mA > MAX_CURRENT) mA = MAX_CURRENT;  // FastLED dims the strip to stay under this
+
+  // padded to 16 chars so it overwrites the previous text without clearing the row
+  char line[17];
+  snprintf(line, sizeof(line), "FPS%4u %4umA  ", fps, (unsigned)mA);
+  lcd.setCursor(0, 1);
+  lcd.print(line);
+
+  frames = 0;
+  lastUpdate = millis();
+}
+
 void setup() {
   initLcd();
 
@@ -172,6 +198,7 @@ void loop()
 
 
   loopDigitDisplay();
+  loopStats();
 }
 
 #define ARRAY_SIZE(A) (sizeof(A) / sizeof((A)[0]))
