@@ -26,20 +26,20 @@
 // -Mark Kriegsman, December 2014
 
 
-#define DATA_PIN    5
-//#define CLK_PIN   4
+#define DATA_PIN    4
 #define LED_TYPE    WS2811
 #define COLOR_ORDER GRB
 #define NUM_LEDS    23 * 2
 CRGB leds[NUM_LEDS];
 
-#define BRIGHTNESS          96
+#define BRIGHTNESS          60  // keep low to save energy
 #define FRAMES_PER_SECOND  120
+#define MAX_CURRENT       1000  // mA, keep current low for the strip to prevent outpower
 
-#define CLK_4_DIGIT 2
-#define DIO_4_DIGIT 3
-#define CLK_6_DIGIT 6
-#define DIO_6_DIGIT 7
+#define CLK_4_DIGIT 5
+#define DIO_4_DIGIT 6
+#define CLK_6_DIGIT 7
+#define DIO_6_DIGIT 8
 
 // LCD Display
 LiquidCrystal_I2C lcd(0x27,16,2);  // set the LCD address to 0x27 for a 16 chars and 2 line display
@@ -91,6 +91,8 @@ void setup() {
 
   // set master brightness control
   FastLED.setBrightness(BRIGHTNESS);
+  // limit current to save energy for a green planet
+  FastLED.setMaxPowerInVoltsAndMilliamps(5, MAX_CURRENT);  // 5V, max 1000 mA
 }
 
 // Forward declarations for pattern functions
