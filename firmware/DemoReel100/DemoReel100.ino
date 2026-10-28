@@ -51,10 +51,45 @@ TM1637TinyDisplay6 bigDisplay(CLK_6_DIGIT, DIO_6_DIGIT);    // 6 digits
 void initLcd() {
   lcd.init();
   lcd.backlight();
-  lcd.setCursor(0, 0);
-  lcd.print("Hello, World!");
-  lcd.setCursor(0, 1);
-  lcd.print("LCD1602 via I2C");
+}
+
+// Button to ground; INPUT_PULLUP keeps the pin HIGH until pressed
+#define BUTTON_PIN A0
+#define DEBOUNCE_MS 50
+
+bool demoOn = true;
+
+// Show the mode on the LCD and blank everything else when the demo is off
+void applyDemoMode() {
+  lcd.clear();
+  lcd.print(demoOn ? "Demo ON" : "Demo OFF");
+
+  if (!demoOn) {
+    FastLED.clear(true);  // true = push the black frame to the strip right away
+    clockDisplay.clear();
+    bigDisplay.clear();
+  }
+}
+
+// Toggles demoOn on each debounced press (HIGH -> LOW edge)
+void loopButton() {
+  static bool lastReading = HIGH;
+  static bool stable = HIGH;
+  static uint32_t lastChange = 0;
+
+  bool reading = digitalRead(BUTTON_PIN);
+  if (reading != lastReading) {
+    lastReading = reading;
+    lastChange = millis();
+  }
+
+  if (millis() - lastChange >= DEBOUNCE_MS && reading != stable) {
+    stable = reading;
+    if (stable == LOW) {
+      demoOn = !demoOn;
+      applyDemoMode();
+    }
+  }
 }
 
 void initDigitDisplay() {
@@ -83,6 +118,8 @@ void setup() {
 
   initDigitDisplay();
 
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+
   delay(3000); // 3 second delay for recovery
   
   // tell FastLED about the LED strip configuration
@@ -93,6 +130,8 @@ void setup() {
   FastLED.setBrightness(BRIGHTNESS);
   // limit current to save energy for a green planet
   FastLED.setMaxPowerInVoltsAndMilliamps(5, MAX_CURRENT);  // 5V, max 1000 mA
+
+  applyDemoMode();
 }
 
 // Forward declarations for pattern functions
@@ -114,6 +153,11 @@ uint8_t gHue = 0; // rotating "base color" used by many of the patterns
   
 void loop()
 {
+  loopButton();
+
+  // Off: strips and displays were blanked once in applyDemoMode(), so just idle
+  if (!demoOn) return;
+
   // Call the current pattern function once, updating the 'leds' array
   gPatterns[gCurrentPatternNumber]();
 
