@@ -1,8 +1,8 @@
 // @filter: (memory is large)
 
-/// @file    DemoReel100.ino
-/// @brief   FastLED "100 lines of code" demo reel, showing off some effects
-/// @example DemoReel100.ino
+/// @file    BiggusDarkus.ino
+/// @brief   LED strip effects with an LCD status readout and two TM1637 displays
+/// @note    Effect patterns are based on the FastLED DemoReel100 example
 
 #include <FastLED.h>
 
