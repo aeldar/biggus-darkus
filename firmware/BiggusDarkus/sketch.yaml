@@ -1,0 +1,4 @@
+# Pins the board for arduino-cli and the Arduino IDE.
+# cpu=atmega328 is the 115200 baud bootloader; use atmega328old for 57600.
+# No default_port: /dev/ttyUSB* numbering shifts between plug-ins.
+default_fqbn: arduino:avr:nano:cpu=atmega328
