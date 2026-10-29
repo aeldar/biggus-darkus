@@ -4,9 +4,10 @@
 /// @brief   Demo mode switch for the LED strip, status LCD and digit displays
 
 #include "button.h"
-#include "digit_displays.h"
+#include "counter_display.h"
 #include "led_strip.h"
 #include "status_lcd.h"
+#include "stopwatch_display.h"
 
 bool demoOn = true;
 
@@ -16,14 +17,16 @@ void applyDemoMode() {
 
   if (!demoOn) {
     clearLedStrip();
-    clearDigitDisplays();
+    clearStopwatchDisplay();
+    clearCounterDisplay();
   }
 }
 
 void setup() {
   initStatusLcd();
 
-  initDigitDisplays();
+  initStopwatchDisplay();
+  initCounterDisplay();
 
   initButton();
 
@@ -44,6 +47,7 @@ void loop() {
   if (!demoOn) return;
 
   showLedDemoFrame();
-  showDigitDemo();
+  showStopwatchDemo();
+  showCounterDemo();
   loopStats();
 }
