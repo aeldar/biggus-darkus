@@ -1,5 +1,5 @@
 /// @file    digit_displays.h
-/// @brief   Demo behaviour for the 4-digit clock and 6-digit counter displays.
+/// @brief   Demo behaviour for the 4-digit stopwatch and 6-digit counter displays.
 
 #pragma once
 

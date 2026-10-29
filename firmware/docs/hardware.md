@@ -55,9 +55,11 @@ brightness is already sufficient.
   `Demo ON` / `Demo OFF`; row 2 shows measured FPS and estimated strip current in mA.
   A `>` before the number means the estimate went past `MAX_CURRENT` and the strip is
   being dimmed to fit; without it, the reading is the true expected draw.
-- **4-digit TM1637** — shows a fixed `12:34` with the colon lit.
+- **4-digit TM1637** — stopwatch starting at `00:00` and ticking once a second.
+  Shows `mm:ss` up to `59:59`, then switches to `hh:mm`, wrapping at `99:59`.
 - **6-digit TM1637** — shows a running counter.
-- Both TM1637 displays run at brightness level 3 and refresh at 10 Hz.
+- Both TM1637 displays run at brightness level 3; the stopwatch updates at 1 Hz and
+  the counter at 10 Hz.
 
 ## Libraries
 
