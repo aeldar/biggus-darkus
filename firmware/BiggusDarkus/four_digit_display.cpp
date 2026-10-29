@@ -13,7 +13,8 @@ namespace {
 constexpr uint8_t kColonMask = 0b01000000;
 constexpr uint32_t kSecondsPerMinute = 60;
 constexpr uint32_t kSecondsPerHour = 60 * 60;
-constexpr uint32_t kSecondsPerDay = 24 * 60 * 60;
+// UL suffix: plain ints are 16-bit on AVR, so 24 * 60 * 60 would overflow.
+constexpr uint32_t kSecondsPerDay = 24UL * 60 * 60;
 
 TM1637TinyDisplay display(PIN_CLK_4DIG, PIN_DIO_4DIG);  // 4 digits with colon
 
