@@ -10,7 +10,7 @@
 // Mode button, wired to ground; INPUT_PULLUP keeps it HIGH until pressed
 #define PIN_BTN        A0
 
-// 4-digit TM1637 (clock display)
+// 4-digit TM1637 (time display: clock, startwatch, timer)
 #define PIN_CLK_4DIG   5
 #define PIN_DIO_4DIG   6
 

@@ -14,11 +14,11 @@ firmware never names those pins because `Wire` selects them.
 | Signal | MCU pin | Connects to | Notes |
 |---|---|---|---|
 | LED data | `4` (`PIN_LED_DATA`) | WS2811 strip data in | Single-wire, no clock |
-| Mode button | `A0` (`PIN_BTN`) | Button to ground | `INPUT_PULLUP`, 50 ms debounce; press toggles demo mode |
-| Clock display CLK | `5` (`PIN_CLK_4DIG`) | 4-digit TM1637 | |
-| Clock display DIO | `6` (`PIN_DIO_4DIG`) | 4-digit TM1637 | |
-| Counter display CLK | `7` (`PIN_CLK_6DIG`) | 6-digit TM1637 | |
-| Counter display DIO | `8` (`PIN_DIO_6DIG`) | 6-digit TM1637 | |
+| Mode button | `A0` (`PIN_BTN`) | Button to ground | `INPUT_PULLUP`, 50 ms debounce; press cycles Demo → Active → Off |
+| 4-digit display CLK | `5` (`PIN_CLK_4DIG`) | 4-digit TM1637 | |
+| 4-digit display DIO | `6` (`PIN_DIO_4DIG`) | 4-digit TM1637 | |
+| 6-digit display CLK | `7` (`PIN_CLK_6DIG`) | 6-digit TM1637 | |
+| 6-digit display DIO | `8` (`PIN_DIO_6DIG`) | 6-digit TM1637 | |
 | LCD SDA | `A4` | 16×2 I²C backpack | Address `0x27` (`LCD_I2C_ADDR`) |
 | LCD SCL | `A5` | 16×2 I²C backpack | Same bus as above |
 
@@ -30,6 +30,8 @@ firmware never names those pins because `Wire` selects them.
   fuse: frames estimated above it are scaled down until they fit, so the brightest
   patterns run visibly dimmer than sparse ones.
 - Master brightness `60` of 255 — deliberately low to save energy.
+- Demo mode runs the pattern rotation; active mode shows only command overlays on a
+  blank strip.
 - The strip needs its own 5 V supply with a shared ground for full output; the Nano
   only drives the data line.
 
@@ -37,29 +39,38 @@ firmware never names those pins because `Wire` selects them.
 
 Deliberately not part of the design — any 5 V USB supply works, currently an old
 2 A phone charger. Because the weakest source you might plug in is a plain USB port
-(500 mA), `MAX_CURRENT` is set low enough to be safe everywhere:
+(500 mA), `kMaxCurrentMa` is set low enough to be safe everywhere:
 
 | Source | Budget | Notes |
 |---|---|---|
-| USB port via the Nano | 500 mA | `MAX_CURRENT` 400 + ~70 mA board and displays ≈ 470 mA |
+| USB port via the Nano | 500 mA | `kMaxCurrentMa` 400 + ~70 mA board and displays ≈ 470 mA |
 | Any 5 V charger, 1 A | ~930 mA usable | cap leaves most of it unused |
 | Current 2 A charger | ~1930 mA usable | same |
 
-If a dedicated supply ever becomes part of the build, raise `MAX_CURRENT` to its
+If a dedicated supply ever becomes part of the build, raise `kMaxCurrentMa` to its
 rating minus ~70 mA of overhead — or keep 400 and accept the dimming, since
 brightness is already sufficient.
 
 ## Displays
 
-- **LCD** — 16×2 character module on an I²C backpack, address `0x27`. Row 1 shows
-  `Demo ON` / `Demo OFF`; row 2 shows measured FPS and estimated strip current in mA.
-  A `>` before the number means the estimate went past `MAX_CURRENT` and the strip is
+- **LCD** — 16×2 character module on an I²C backpack, address `0x27`. Row 1 shows the
+  global mode (`Demo ON`, `Mode ACTIVE`, or blank when off); row 2 shows measured FPS
+  and estimated strip current in demo mode, or command text in active mode. A `>`
+  before the number means the estimate went past the current cap and the strip is
   being dimmed to fit; without it, the reading is the true expected draw.
-- **4-digit TM1637** — stopwatch starting at `00:00` and ticking once a second.
-  Shows `mm:ss` up to `59:59`, then switches to `hh:mm`, wrapping at `99:59`.
-- **6-digit TM1637** — shows a running counter.
-- Both TM1637 displays run at brightness level 3; the stopwatch updates at 1 Hz and
-  the counter at 10 Hz.
+- **4-digit TM1637** — three independent time modes: clock (`hh:mm`, wraps at 24:00),
+  startwatch (counts up), and timer (counts down, stops at `00:00`). Startwatch and
+  timer show `mm:ss` below one hour, then `hh:mm`. Demo mode shows a fixed `12:34`.
+- **6-digit TM1637** — static value, count up, or count down. Demo mode shows a fixed
+  `123456`.
+- Both TM1637 displays run at brightness level 3.
+
+## Serial
+
+The USB serial port runs the command console at **9600 baud**. Commands are
+newline-terminated; see [`commands.md`](commands.md). 9600 is deliberate: the LED
+frame functions block for about 8 ms, and at 115200 the 64-byte receive buffer can
+overflow during a burst.
 
 ## Libraries
 

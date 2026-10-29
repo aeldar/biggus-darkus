@@ -1,31 +1,22 @@
 // @filter: (memory is large)
 
 /// @file    BiggusDarkus.ino
-/// @brief   Demo mode switch for the LED strip, status LCD and digit displays
+/// @brief   Demo and manual control for the LED strip, status LCD and digit displays
 
+#include "app_mode.h"
 #include "button.h"
 #include "counter_display.h"
+#include "four_digit_display.h"
 #include "led_strip.h"
+#include "serial_commands.h"
 #include "status_lcd.h"
-#include "stopwatch_display.h"
-
-bool demoOn = true;
-
-// Show the mode on the LCD and blank everything else when the demo is off
-void applyDemoMode() {
-  showDemoMode(demoOn);
-
-  if (!demoOn) {
-    clearLedStrip();
-    clearStopwatchDisplay();
-    clearCounterDisplay();
-  }
-}
 
 void setup() {
+  initSerialCommands();
+
   initStatusLcd();
 
-  initStopwatchDisplay();
+  initFourDigitDisplay();
   initCounterDisplay();
 
   initButton();
@@ -34,20 +25,27 @@ void setup() {
 
   initLedStrip();
 
-  applyDemoMode();
+  initMode();  // start in DEMO
 }
 
 void loop() {
-  if (buttonPressed()) {
-    demoOn = !demoOn;
-    applyDemoMode();
+  loopSerialCommands();
+
+  if (buttonPressed()) nextMode();
+
+  switch (currentMode()) {
+    case Mode::Off:
+      break;
+
+    case Mode::Demo:
+      showLedDemoFrame();
+      loopStats();
+      break;
+
+    case Mode::Active:
+      showActiveLedFrame();
+      loopFourDigitDisplay();
+      loopCounterDisplay();
+      break;
   }
-
-  // Off: strips and displays were blanked once in applyDemoMode(), so just idle
-  if (!demoOn) return;
-
-  showLedDemoFrame();
-  showStopwatchDemo();
-  showCounterDemo();
-  loopStats();
 }

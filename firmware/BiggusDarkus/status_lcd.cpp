@@ -1,9 +1,10 @@
 /// @file    status_lcd.cpp
-/// @brief   Demo mode line and live strip stats on the 16x2 LCD.
+/// @brief   Mode text and live strip stats on the 16x2 LCD.
 
 #include "status_lcd.h"
 
 #include <Arduino.h>
+#include <stdio.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
@@ -21,9 +22,22 @@ void initStatusLcd() {
   lcd.backlight();
 }
 
-void showDemoMode(bool on) {
+void showLcdRow(uint8_t row, const char* text) {
+  if (row < 1 || row > 2) return;
+
+  // padded to 16 chars so it overwrites the previous text without clearing the row
+  char line[17];
+  snprintf(line, sizeof(line), "%-16.16s", text ? text : "");
+  lcd.setCursor(0, row - 1);
+  lcd.print(line);
+}
+
+void clearLcdRow(uint8_t row) {
+  showLcdRow(row, "");
+}
+
+void clearStatusLcd() {
   lcd.clear();
-  lcd.print(on ? "Demo ON" : "Demo OFF");
 }
 
 void loopStats() {
@@ -39,7 +53,6 @@ void loopStats() {
   uint16_t fps = (uint32_t)frames * 1000 / elapsed;
   LedStripPower power = readLedStripPower();
 
-  // padded to 16 chars so it overwrites the previous text without clearing the row
   char line[17];
   snprintf(line, sizeof(line), "FPS%4u %c%4umA ", fps, power.limited ? '>' : ' ',
            (unsigned)power.milliAmps);
