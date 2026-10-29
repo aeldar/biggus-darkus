@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "embedded-systems": {
+      "source": "jeffallan/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/embedded-systems/SKILL.md",
+      "computedHash": "a40061d2762079c165112fe069be95047d7aaad0efa5dda847b6d911264a366c"
+    }
+  }
+}
