@@ -165,22 +165,43 @@ bool setLedRange(uint8_t start, uint8_t end, uint8_t red, uint8_t green, uint8_t
                  LedAnimation animation, uint16_t periodMs) {
   if (start >= end || end > kLedCount) return false;
 
+  // slots we can reuse: idle ones plus overlays the new range fully covers
+  uint8_t free = 0, splits = 0;
+  for (uint8_t i = 0; i < kMaxOverlays; i++) {
+    const Overlay& o = overlays[i];
+    if (!o.active || (o.start >= start && o.end <= end)) free++;
+    else if (o.start < start && o.end > end) splits++;
+  }
+  if (splits + 1 > free) return false;
+
+  // the new command owns its range, so cut it out of every older overlay;
+  // drop covered ones first so splits always find a free slot
+  for (uint8_t i = 0; i < kMaxOverlays; i++) {
+    if (overlays[i].active && overlays[i].start >= start && overlays[i].end <= end) {
+      overlays[i].active = false;
+    }
+  }
+  for (uint8_t i = 0; i < kMaxOverlays; i++) {
+    Overlay& o = overlays[i];
+    if (!o.active || o.end <= start || o.start >= end) continue;
+    if (o.start < start && o.end > end) {
+      Overlay right = o;
+      right.start = end;
+      for (uint8_t j = 0; j < kMaxOverlays; j++) {
+        if (!overlays[j].active) { overlays[j] = right; break; }
+      }
+      o.end = start;
+    } else if (o.start < start) {
+      o.end = start;
+    } else if (o.end > end) {
+      o.start = end;
+    }
+  }
+
   Overlay* slot = nullptr;
   for (uint8_t i = 0; i < kMaxOverlays; i++) {
-    if (overlays[i].active && overlays[i].start == start && overlays[i].end == end) {
-      slot = &overlays[i];
-      break;
-    }
+    if (!overlays[i].active) { slot = &overlays[i]; break; }
   }
-  if (!slot) {
-    for (uint8_t i = 0; i < kMaxOverlays; i++) {
-      if (!overlays[i].active) {
-        slot = &overlays[i];
-        break;
-      }
-    }
-  }
-  if (!slot) return false;
 
   slot->active = true;
   slot->start = start;

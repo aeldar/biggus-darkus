@@ -90,7 +90,8 @@ Ranges are `[start, end)`, with `start` and `end` in `0..46`. `0 23` is the firs
   for pulse.
 - Overlays are visible in `ACTIVE` on an otherwise blank strip. They are hidden in
   `DEMO` and `OFF` but preserved.
-- Starting an overlay on the same `start`/`end` replaces it.
+- A new overlay owns its range. Older overlays are trimmed, split or removed where they
+  overlap it. A split needs a free slot, otherwise the command answers `ERR FULL`.
 
 ## Replies
 
