@@ -13,23 +13,21 @@ namespace {
 constexpr uint8_t kBrightness = 60;       // keep low to save energy
 constexpr uint8_t kFramesPerSecond = 120;
 constexpr uint16_t kMaxCurrentMa = 400;   // sized to keep USB-only runs inside the 500 mA port limit
-constexpr uint8_t kMaxOverlays = 4;
 
 CRGB leds[kLedCount];
 
 uint8_t currentPattern = 0;  // index into patterns
 uint8_t hue = 0;             // rotating "base color" used by many of the patterns
 
-struct Overlay {
-  bool active;
-  uint8_t start;
-  uint8_t end;
+// Each LED remembers its own command state, so a new command simply overwrites it.
+struct LedState {
+  bool on;
   CRGB color;
   LedAnimation animation;
   uint16_t periodMs;
 };
 
-Overlay overlays[kMaxOverlays];
+LedState states[kLedCount];
 
 void rainbow() {
   // FastLED's built-in rainbow generator
@@ -90,32 +88,31 @@ void nextPattern() {
   currentPattern = (currentPattern + 1) % (sizeof(patterns) / sizeof(patterns[0]));
 }
 
-void paintOverlay(const Overlay& overlay, uint32_t now) {
-  uint16_t period = overlay.periodMs == 0 ? 500 : overlay.periodMs;
-  CRGB color = overlay.color;
+void paintLed(uint8_t index, uint32_t now) {
+  const LedState& state = states[index];
+  if (!state.on) return;
 
-  if (overlay.animation == LedAnimation::Blink) {
+  uint16_t period = state.periodMs == 0 ? 500 : state.periodMs;
+  CRGB color = state.color;
+
+  if (state.animation == LedAnimation::Blink) {
     if (((now / period) & 1) != 0) return;
-  } else if (overlay.animation == LedAnimation::Pulse) {
+  } else if (state.animation == LedAnimation::Pulse) {
     // triangle wave: dark at the edges, full brightness in the middle
     uint32_t phase = (now % period) * 255UL / period;
     uint8_t scale = phase < 128 ? phase * 2 : (255 - phase) * 2;
     color.nscale8(scale);
   }
 
-  for (uint8_t i = overlay.start; i < overlay.end; i++) {
-    leds[i] = color;
-  }
+  leds[index] = color;
 }
 
 void drawPattern() {
   patterns[currentPattern]();
 }
 
-void paintOverlays(uint32_t now) {
-  for (uint8_t i = 0; i < kMaxOverlays; i++) {
-    if (overlays[i].active) paintOverlay(overlays[i], now);
-  }
+void paintStates(uint32_t now) {
+  for (uint8_t i = 0; i < kLedCount; i++) paintLed(i, now);
 }
 
 void advancePattern() {
@@ -142,9 +139,9 @@ void showLedDemoFrame() {
 }
 
 void showActiveLedFrame() {
-  // active mode shows only command overlays; the demo pattern stays hidden
+  // active mode shows only command states; the demo pattern stays hidden
   FastLED.clear();
-  paintOverlays(millis());
+  paintStates(millis());
   FastLED.show();
   FastLED.delay(1000 / kFramesPerSecond);
 }
@@ -161,67 +158,18 @@ LedStripPower readLedStripPower() {
   return {limited ? kMaxCurrentMa : (uint16_t)mA, limited};
 }
 
-bool setLedRange(uint8_t start, uint8_t end, uint8_t red, uint8_t green, uint8_t blue,
+void setLedRange(uint8_t start, uint8_t end, uint8_t red, uint8_t green, uint8_t blue,
                  LedAnimation animation, uint16_t periodMs) {
-  if (start >= end || end > kLedCount) return false;
-
-  // slots we can reuse: idle ones plus overlays the new range fully covers
-  uint8_t free = 0, splits = 0;
-  for (uint8_t i = 0; i < kMaxOverlays; i++) {
-    const Overlay& o = overlays[i];
-    if (!o.active || (o.start >= start && o.end <= end)) free++;
-    else if (o.start < start && o.end > end) splits++;
+  if (start >= end || end > kLedCount) return;
+  for (uint8_t i = start; i < end; i++) {
+    states[i] = {true, CRGB(red, green, blue), animation, periodMs};
   }
-  if (splits + 1 > free) return false;
-
-  // the new command owns its range, so cut it out of every older overlay;
-  // drop covered ones first so splits always find a free slot
-  for (uint8_t i = 0; i < kMaxOverlays; i++) {
-    if (overlays[i].active && overlays[i].start >= start && overlays[i].end <= end) {
-      overlays[i].active = false;
-    }
-  }
-  for (uint8_t i = 0; i < kMaxOverlays; i++) {
-    Overlay& o = overlays[i];
-    if (!o.active || o.end <= start || o.start >= end) continue;
-    if (o.start < start && o.end > end) {
-      Overlay right = o;
-      right.start = end;
-      for (uint8_t j = 0; j < kMaxOverlays; j++) {
-        if (!overlays[j].active) { overlays[j] = right; break; }
-      }
-      o.end = start;
-    } else if (o.start < start) {
-      o.end = start;
-    } else if (o.end > end) {
-      o.start = end;
-    }
-  }
-
-  Overlay* slot = nullptr;
-  for (uint8_t i = 0; i < kMaxOverlays; i++) {
-    if (!overlays[i].active) { slot = &overlays[i]; break; }
-  }
-
-  slot->active = true;
-  slot->start = start;
-  slot->end = end;
-  slot->color = CRGB(red, green, blue);
-  slot->animation = animation;
-  slot->periodMs = periodMs;
-  return true;
 }
 
 void clearLedRange(uint8_t start, uint8_t end) {
-  for (uint8_t i = 0; i < kMaxOverlays; i++) {
-    if (overlays[i].active && overlays[i].start == start && overlays[i].end == end) {
-      overlays[i].active = false;
-    }
-  }
+  for (uint8_t i = start; i < end && i < kLedCount; i++) states[i].on = false;
 }
 
 void clearLedRanges() {
-  for (uint8_t i = 0; i < kMaxOverlays; i++) {
-    overlays[i].active = false;
-  }
+  clearLedRange(0, kLedCount);
 }

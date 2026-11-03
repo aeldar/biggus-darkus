@@ -120,12 +120,12 @@ active value untouched.
 
 ## LED strip
 
-- `DEMO` runs the FastLED DemoReel100 pattern rotation without overlays.
-- `ACTIVE` shows a blank strip with up to four command overlays on top, then pushes
+- `DEMO` runs the FastLED DemoReel100 pattern rotation without command states.
+- `ACTIVE` shows a blank strip with the per-LED command states on top, then pushes
   the frame. The demo pattern is not drawn.
-- An overlay is a range `[start, end)`, a colour, an animation (`SOLID`, `BLINK`,
-  `PULSE`) and a period.
-- Overlays survive mode changes. `OFF` blanks the strip but keeps them; `DEMO` hides
+- Each LED stores its own state: on or off, a colour, an animation (`SOLID`, `BLINK`,
+  `PULSE`) and a period. A range command writes that state into every LED in the range.
+- LED states survive mode changes. `OFF` blanks the strip but keeps them; `DEMO` hides
   them; `ACTIVE` shows them again. `LED_STRIP CLEAR` removes them.
 
 The strip is still capped at 400 mA and brightness 60.
@@ -147,5 +147,5 @@ burst. 9600 leaves plenty of headroom.
 ## Memory
 
 The firmware uses about 73% of flash and 58% of SRAM on the ATmega328. The main RAM
-costs are the Serial library buffers, the 64-byte command line and the four overlay
-slots. There is no dynamic allocation.
+costs are the Serial library buffers, the 64-byte command line and the per-LED
+state array. There is no dynamic allocation.

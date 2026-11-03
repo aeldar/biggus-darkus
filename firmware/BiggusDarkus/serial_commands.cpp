@@ -342,10 +342,7 @@ void handleLedStrip(char* action, char* args) {
     period = (uint16_t)parsed;
   }
 
-  if (!setLedRange((uint8_t)start, (uint8_t)end, red, green, blue, animation, period)) {
-    reply(F("ERR FULL"));
-    return;
-  }
+  setLedRange((uint8_t)start, (uint8_t)end, red, green, blue, animation, period);
   reply(F("OK"));
 }
 

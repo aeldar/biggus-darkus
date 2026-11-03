@@ -74,24 +74,24 @@ Text is truncated to 16 characters. Row 2 is used by the FPS/current stats in
 ## LED strip
 
 Ranges are `[start, end)`, with `start` and `end` in `0..46`. `0 23` is the first
-23 pixels. Up to four overlays can be active at once.
+23 pixels. Every LED keeps its own state: off, solid, blink or pulse.
 
 | Command | Effect |
 |---|---|
 | `LED_STRIP RANGE 0 23 COLOR FF0000 ANIM SOLID` | Solid red on the first 23 pixels |
 | `LED_STRIP RANGE 0 23 COLOR 00FF00 ANIM BLINK 500` | Green blink, 500 ms period |
 | `LED_STRIP RANGE 0 23 COLOR 0000FF ANIM PULSE 1000` | Blue pulse, 1000 ms period |
-| `LED_STRIP RANGE 0 23 CLEAR` | Remove the overlay with exactly that range |
-| `LED_STRIP CLEAR` | Remove all overlays |
+| `LED_STRIP RANGE 0 23 CLEAR` | Turn off the LEDs in that range |
+| `LED_STRIP CLEAR` | Turn off all LEDs |
 
 - Colour is `RRGGBB` in hex.
 - `ANIM` is `SOLID`, `BLINK` or `PULSE`.
 - The optional period is in milliseconds; defaults are 500 ms for blink and 1000 ms
   for pulse.
-- Overlays are visible in `ACTIVE` on an otherwise blank strip. They are hidden in
+- LED states are visible in `ACTIVE` on an otherwise blank strip. They are hidden in
   `DEMO` and `OFF` but preserved.
-- A new overlay owns its range. Older overlays are trimmed, split or removed where they
-  overlap it. A split needs a free slot, otherwise the command answers `ERR FULL`.
+- A new command replaces the state of every LED in its range, so no old animation
+  survives there. LEDs outside the range keep their state.
 
 ## Replies
 
@@ -102,7 +102,6 @@ Ranges are `[start, end)`, with `start` and `end` in `0..46`. `0 23` is the firs
 | `ERR UNKNOWN` | Unknown device |
 | `ERR ARGS` | Missing or malformed argument |
 | `ERR RANGE` | Number or range out of bounds |
-| `ERR FULL` | All four LED overlay slots are in use |
 | `ERR LINE` | Line longer than 64 characters |
 
 ## Examples
