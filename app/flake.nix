@@ -31,6 +31,9 @@
           systemd.dev # libudev, needed by serialport
         ];
 
+        # Registry crates fetched at eval time from Cargo.lock checksums, so checks need no network.
+        vendored = pkgs.rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
+
         # Rust-only checks need just the toolchain, so they stay fast and light.
         cargoCheck = name: cmd:
           pkgs.runCommand name
@@ -42,6 +45,14 @@
               cp -r $src source && chmod -R u+w source && cd source
               # Cargo needs a writable home even when offline.
               export CARGO_HOME=$TMPDIR/cargo CARGO_TARGET_DIR=$TMPDIR/target
+              # Point crates.io at the vendored copy: https://doc.rust-lang.org/cargo/reference/source-replacement.html
+              mkdir -p $CARGO_HOME
+              cat > $CARGO_HOME/config.toml <<EOF
+              [source.crates-io]
+              replace-with = "vendored"
+              [source.vendored]
+              directory = "${vendored}"
+              EOF
               ${cmd}
               touch $out
             '';
