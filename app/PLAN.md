@@ -1,5 +1,8 @@
 # Biggus Darkus app: implementation plan
 
+> **History.** This is the original plan; milestones 0-7 are all done. For what exists now and why, read
+> `docs/architecture.md`.
+
 ## Key references
 
 - **Elite Dangerous journal format:** <https://elite-journal.readthedocs.io/en/latest/> — the official

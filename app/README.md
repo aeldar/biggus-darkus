@@ -1,7 +1,7 @@
 # Biggus Darkus app
 
 Desktop app that reads Elite Dangerous journal files and drives the Biggus Darkus
-board (LEDs, LCD, digit displays) over serial. See `PLAN.md` for the design.
+board (LEDs, LCD, digit displays) over serial. See `docs/architecture.md` for the design and decisions.
 
 ## Dev shell
 
