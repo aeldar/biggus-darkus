@@ -1,9 +1,26 @@
 //! Headless runner and debug tool.
 
-use std::{process::ExitCode, time::Duration};
+// Tests may panic on failure; that is how they fail.
+#![cfg_attr(test, allow(clippy::expect_used, clippy::panic))]
 
-use bd_device::{Device, SerialTransport, Transport, list_ports};
+mod run;
+
+use std::{
+    io,
+    path::{Path, PathBuf},
+    process::ExitCode,
+    sync::{
+        Arc,
+        atomic::{AtomicBool, Ordering},
+        mpsc,
+    },
+    time::Duration,
+};
+
+use bd_device::{ConnectionState, Device, Link, SerialTransport, Transport, list_ports};
+use bd_journal::{DirSource, ReplaySource, dir, watch::watch};
 use bd_protocol::{Command, ParseError, Reply};
+use bd_rules::Config;
 use clap::{Parser, Subcommand};
 use thiserror::Error;
 
@@ -30,6 +47,24 @@ enum Action {
         #[arg(required = true, trailing_var_arg = true, allow_hyphen_values = true)]
         command: Vec<String>,
     },
+    /// Follow the game and drive the board until Ctrl-C.
+    Run {
+        /// Serial port, such as /dev/ttyUSB0.
+        #[arg(long, required_unless_present = "dry_run", conflicts_with = "dry_run")]
+        port: Option<String>,
+        /// Journal folder; found automatically if omitted.
+        #[arg(long, conflicts_with = "replay")]
+        journal_dir: Option<PathBuf>,
+        /// Rules file (TOML); built-in rules if omitted.
+        #[arg(long)]
+        config: Option<PathBuf>,
+        /// Log the commands without opening a port.
+        #[arg(long)]
+        dry_run: bool,
+        /// Play back a recorded journal folder once instead of following the game.
+        #[arg(long)]
+        replay: Option<PathBuf>,
+    },
 }
 
 #[derive(Debug, Error)]
@@ -40,6 +75,105 @@ enum CliError {
     Device(#[from] bd_device::Error),
     #[error("cannot open port: {0}")]
     Port(#[from] std::io::Error),
+    #[error("no journal folder found; pass --journal-dir")]
+    NoJournalDir,
+    #[error("cannot read config: {0}")]
+    ConfigRead(io::Error),
+    #[error(transparent)]
+    Config(#[from] bd_rules::ConfigError),
+    #[error("cannot watch the journal folder: {0}")]
+    Watch(String),
+    #[error("could not connect to the board")]
+    Connect,
+}
+
+/// Where the game's journal is, or `None` on an unsupported system.
+fn detect_journal_dir() -> Option<PathBuf> {
+    let platform = dir::current_platform()?;
+    let home = std::env::var_os("HOME").or_else(|| std::env::var_os("USERPROFILE"))?;
+    let xdg = std::env::var_os("XDG_DATA_HOME").map(PathBuf::from);
+    let found = dir::candidates(platform, Path::new(&home), xdg.as_deref());
+    dir::detect(&found, Path::is_dir)
+}
+
+/// Stands in for the board in `--dry-run`: swallows lines and always answers OK.
+struct DryRun;
+
+impl Transport for DryRun {
+    fn read_line(&mut self, _timeout: Duration) -> io::Result<String> {
+        Ok("OK".to_owned())
+    }
+    fn write_line(&mut self, _line: &str) -> io::Result<()> {
+        Ok(())
+    }
+    fn discard_input(&mut self) -> io::Result<()> {
+        Ok(())
+    }
+}
+
+/// Where the game data comes from.
+enum Feed {
+    Live(PathBuf),
+    Replay(PathBuf),
+}
+
+/// Connect (failing fast on a wrong port), then run until the feed ends or Ctrl-C.
+fn go<T: Transport, F: FnMut() -> io::Result<T>>(
+    feed: Feed,
+    config: &Config,
+    mut link: Link<T, F>,
+) -> Result<(), CliError> {
+    if link.try_connect() != ConnectionState::Connected {
+        return Err(CliError::Connect);
+    }
+    match feed {
+        Feed::Replay(dir) => run::run_once(&ReplaySource::from_dir(&dir)?, config, &mut link)?,
+        Feed::Live(dir) => {
+            let (tx, rx) = mpsc::channel();
+            // Kept alive for the whole loop; dropping it stops the notifications.
+            let _watcher = watch(&dir, tx.clone()).map_err(|e| CliError::Watch(e.to_string()))?;
+            let stop = Arc::new(AtomicBool::new(false));
+            let flag = Arc::clone(&stop);
+            // The extra wake-up ends the wait at once instead of after the poll interval.
+            ctrlc::set_handler(move || {
+                flag.store(true, Ordering::SeqCst);
+                let _ = tx.send(());
+            })
+            .map_err(io::Error::other)?;
+            run::run_loop(&DirSource(dir), config, &mut link, &rx, &stop)?;
+        }
+    }
+    Ok(())
+}
+
+fn run_command(
+    port: Option<String>,
+    journal_dir: Option<PathBuf>,
+    config: Option<PathBuf>,
+    replay: Option<PathBuf>,
+) -> Result<(), CliError> {
+    let config = match config {
+        Some(path) => {
+            Config::from_toml(&std::fs::read_to_string(path).map_err(CliError::ConfigRead)?)?
+        }
+        None => Config::default(),
+    };
+    let feed = match replay {
+        Some(dir) => Feed::Replay(dir),
+        None => Feed::Live(
+            journal_dir
+                .or_else(detect_journal_dir)
+                .ok_or(CliError::NoJournalDir)?,
+        ),
+    };
+    match port {
+        Some(port) => go(
+            feed,
+            &config,
+            Link::new(move || SerialTransport::open(&port), REPLY_TIMEOUT),
+        ),
+        None => go(feed, &config, Link::new(|| Ok(DryRun), REPLY_TIMEOUT)),
+    }
 }
 
 /// Words typed on the shell back into the one line the protocol parser expects.
@@ -71,6 +205,16 @@ fn run(cli: Cli) -> Result<ExitCode, CliError> {
             } else {
                 ExitCode::FAILURE
             })
+        }
+        Action::Run {
+            port,
+            journal_dir,
+            config,
+            dry_run: _,
+            replay,
+        } => {
+            run_command(port, journal_dir, config, replay)?;
+            Ok(ExitCode::SUCCESS)
         }
     }
 }

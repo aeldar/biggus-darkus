@@ -10,5 +10,8 @@ workspace = true
 [dependencies]
 bd-device = { path = "../bd-device" }
 bd-protocol = { path = "../bd-protocol" }
+bd-journal = { path = "../bd-journal" }
+bd-rules = { path = "../bd-rules" }
 clap = { version = "4", features = ["derive"] }
+ctrlc = "3"
 thiserror = "2"
