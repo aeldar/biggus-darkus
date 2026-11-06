@@ -6,3 +6,8 @@ publish.workspace = true
 
 [lints]
 workspace = true
+
+[dependencies]
+bd-protocol = { path = "../bd-protocol" }
+serialport = "4"
+thiserror = "2"

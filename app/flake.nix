@@ -40,6 +40,8 @@
             {
               src = ./.;
               nativeBuildInputs = [ toolchain pkgs.pkg-config ];
+              # libudev for serialport (via libudev-sys's pkg-config probe).
+              buildInputs = [ pkgs.systemd.dev ];
             }
             ''
               cp -r $src source && chmod -R u+w source && cd source

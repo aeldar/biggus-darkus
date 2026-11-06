@@ -6,3 +6,9 @@ publish.workspace = true
 
 [lints]
 workspace = true
+
+[dependencies]
+bd-device = { path = "../bd-device" }
+bd-protocol = { path = "../bd-protocol" }
+clap = { version = "4", features = ["derive"] }
+thiserror = "2"
