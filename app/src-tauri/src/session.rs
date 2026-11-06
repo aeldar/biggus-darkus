@@ -5,14 +5,16 @@ use std::{
     sync::{
         Arc, Mutex, MutexGuard, PoisonError,
         atomic::{AtomicBool, Ordering},
-        mpsc::{self, Sender},
+        mpsc::{self, Receiver, Sender},
     },
     thread::{self, JoinHandle},
+    time::Duration,
 };
 
 use bd_device::{ConnectionState, Link, SerialTransport};
 use bd_journal::{DirSource, watch::watch};
-use bd_pipeline::{REPLY_TIMEOUT, detect_journal_dir, run_loop};
+use bd_pipeline::{Control, REPLY_TIMEOUT, detect_journal_dir, run_loop};
+use bd_protocol::Command;
 use bd_rules::Config;
 use tauri::{AppHandle, Manager};
 use tauri_specta::Event;
@@ -25,8 +27,8 @@ pub struct Request {
     pub port: String,
     /// Journal folder; found automatically if `None`.
     pub journal_dir: Option<PathBuf>,
-    /// Rules file (TOML); built-in rules if `None`.
-    pub config: Option<PathBuf>,
+    /// Rules to start with.
+    pub config: Config,
 }
 
 /// A live pipeline thread and the handles to stop it.
@@ -34,6 +36,8 @@ struct Running {
     stop: Arc<AtomicBool>,
     /// Wakes the loop so it sees `stop` at once instead of after its poll interval.
     wake: Sender<()>,
+    /// Requests for the loop: manual commands and new rules.
+    control: Sender<Control>,
     thread: JoinHandle<()>,
 }
 
@@ -44,6 +48,9 @@ pub struct Session {
     snapshot: Mutex<Snapshot>,
 }
 
+/// How long a manual command may wait for its answer.
+const ANSWER_WAIT: Duration = Duration::from_secs(5);
+
 /// A poisoned lock only means another thread panicked; the data is still usable.
 fn lock<T>(m: &Mutex<T>) -> MutexGuard<'_, T> {
     m.lock().unwrap_or_else(PoisonError::into_inner)
@@ -53,6 +60,11 @@ impl Session {
     /// What the UI needs to draw itself from scratch.
     pub fn snapshot(&self) -> Snapshot {
         lock(&self.snapshot).clone()
+    }
+
+    /// Add a line to the log, for things that happen outside the pipeline.
+    pub fn log(&self, app: &AppHandle, line: String) {
+        self.publish(app, Change::Log(line));
     }
 
     /// Remember a change and tell the UI about it.
@@ -77,18 +89,50 @@ impl Session {
         }
         let stop = Arc::new(AtomicBool::new(false));
         let (wake, rx) = mpsc::channel();
+        let (control, queue) = mpsc::channel();
         let (this, flag, tx) = (Arc::clone(self), Arc::clone(&stop), wake.clone());
         self.publish(&app, Change::Game(Game::default()));
         self.publish(&app, Change::Connection(Connection::Connecting));
         let thread = thread::spawn(move || {
-            let result = run(&this, &app, &request, &flag, tx, &rx);
+            let result = run(&this, &app, request, &flag, tx, (&rx, &queue));
             if let Err(e) = result {
                 this.publish(&app, Change::Log(format!("error: {e}")));
             }
             this.publish(&app, Change::Connection(Connection::Stopped));
         });
-        *running = Some(Running { stop, wake, thread });
+        *running = Some(Running {
+            stop,
+            wake,
+            control,
+            thread,
+        });
         Ok(())
+    }
+
+    /// Put a request on the loop's queue and wake it. `None` when no pipeline is running.
+    fn enqueue(&self, request: Control) -> Option<()> {
+        let running = lock(&self.running);
+        let r = running.as_ref().filter(|r| !r.thread.is_finished())?;
+        // The loop owns the port, so a request is handled between its steps and cannot race it.
+        r.control.send(request).ok()?;
+        r.wake.send(()).ok()
+    }
+
+    /// Send one command through the running pipeline and wait for the board's reply.
+    pub fn send_manual(&self, command: Command) -> Result<String, String> {
+        let (answer, reply) = mpsc::channel();
+        self.enqueue(Control::Send { command, answer })
+            .ok_or("not running")?;
+        // A reply takes REPLY_TIMEOUT at most; the margin covers the loop finishing its tick first.
+        reply
+            .recv_timeout(ANSWER_WAIT)
+            .map_err(|_| "no answer from the pipeline".to_owned())?
+            .map(|r| r.to_string())
+    }
+
+    /// Give a running pipeline new rules; with none running they simply load at the next start.
+    pub fn set_rules(&self, config: Config) {
+        let _ = self.enqueue(Control::SetConfig(config));
     }
 
     /// Stop the pipeline and wait for it, so the board is back in demo mode when this returns.
@@ -105,18 +149,11 @@ impl Session {
 fn run(
     session: &Session,
     app: &AppHandle,
-    request: &Request,
+    request: Request,
     stop: &AtomicBool,
     wake_tx: Sender<()>,
-    wake_rx: &mpsc::Receiver<()>,
+    (wake_rx, queue): (&Receiver<()>, &Receiver<Control>),
 ) -> Result<(), String> {
-    let config = match &request.config {
-        Some(path) => Config::from_toml(
-            &std::fs::read_to_string(path).map_err(|e| format!("cannot read config: {e}"))?,
-        )
-        .map_err(|e| e.to_string())?,
-        None => Config::default(),
-    };
     let dir = request
         .journal_dir
         .clone()
@@ -131,9 +168,10 @@ fn run(
     }
     run_loop(
         &DirSource(dir),
-        &config,
+        request.config,
         &mut link,
         wake_rx,
+        queue,
         stop,
         &mut |report| session.publish(app, report.into()),
     )

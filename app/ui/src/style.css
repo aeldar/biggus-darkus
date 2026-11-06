@@ -39,9 +39,41 @@ body {
 main {
   display: grid;
   gap: 12px;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto 1fr;
   height: 100vh;
   padding: 12px;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+}
+.tabs button {
+  border-radius: 6px;
+  padding: 4px 14px;
+}
+.tabs button[aria-selected="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
+.panel {
+  min-height: 0;
+  overflow: auto;
+}
+
+/* Status: fixed panels with the log taking the rest. */
+.stack {
+  display: grid;
+  gap: 12px;
+  grid-template-rows: auto auto 1fr;
+  height: 100%;
+}
+/* Other tabs: panels at their natural height. */
+.stack-auto {
+  display: grid;
+  gap: 12px;
 }
 
 section {
@@ -68,6 +100,8 @@ h2 {
 }
 
 select,
+input[type="text"],
+input[type="number"],
 button {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -158,4 +192,112 @@ dd {
   font: 12px/1.5 ui-monospace, monospace;
   margin: 0;
   overflow: auto;
+}
+
+input[type="text"],
+input[type="number"] {
+  min-width: 0;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.muted {
+  color: var(--muted);
+  margin: 8px 0;
+}
+.mono {
+  font-family: ui-monospace, monospace;
+}
+.grow {
+  flex: 1;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.field > span:first-child {
+  color: var(--muted);
+  font-size: 12px;
+}
+.check {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+}
+.form {
+  display: grid;
+  gap: 10px;
+  max-width: 560px;
+}
+
+.rules {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+}
+.rule {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+.rule.invalid {
+  border-color: var(--bad);
+}
+.rule-head {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.fields {
+  align-items: end;
+  display: grid;
+  gap: 8px 12px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  grid-column: 1 / -1;
+}
+
+.help,
+.history {
+  display: grid;
+  gap: 4px;
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+.help li {
+  align-items: baseline;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 170px minmax(0, 1.5fr) minmax(0, 1fr);
+}
+.help code,
+.history code,
+.toml {
+  font: 12px/1.5 ui-monospace, monospace;
+}
+.history li.bad {
+  color: var(--bad);
+}
+.toml {
+  margin: 8px 0 0;
+  overflow: auto;
+}
+summary {
+  cursor: pointer;
 }

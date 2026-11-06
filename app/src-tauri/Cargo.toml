@@ -17,8 +17,11 @@ tauri-build = { version = "2", features = [] }
 bd-device = { path = "../crates/bd-device" }
 bd-journal = { path = "../crates/bd-journal" }
 bd-pipeline = { path = "../crates/bd-pipeline" }
-bd-rules = { path = "../crates/bd-rules" }
+bd-protocol = { path = "../crates/bd-protocol" }
+bd-rules = { path = "../crates/bd-rules", features = ["specta"] }
 serde = { version = "1", features = ["derive"] }
+thiserror = "2"
+toml = "0.9"
 tauri = { version = "2", features = [] }
 # tauri-specta 2.0.0-rc.26 pins these exactly, so they must be pinned here too.
 # https://crates.io/crates/tauri-specta/2.0.0-rc.26

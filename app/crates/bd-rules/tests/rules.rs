@@ -376,3 +376,58 @@ fn valid_four_and_six_digit_forms_load() {
         Config::from_toml(&rule_with(action)).expect(action);
     }
 }
+
+#[test]
+fn default_config_survives_toml_and_specs() {
+    let default = Config::default();
+    assert!(!default.rules.is_empty());
+    let text = default.to_toml().expect("to toml");
+    assert_eq!(Config::from_toml(&text).expect("reparse"), default);
+    assert_eq!(
+        Config::from_specs(default.to_specs()).expect("from specs"),
+        default
+    );
+}
+
+#[test]
+fn every_action_shape_round_trips() {
+    let c = cfg(r#"
+[[rules]]
+trigger = { event = "FSDJump" }
+action = { output = "led", start = 1, end = 5, color = "0a0B0c", anim = "blink", period_ms = 250 }
+[[rules]]
+trigger = { state = "docked" }
+action = { output = "lcd", row = 2, text = "Hi {station}!" }
+[[rules]]
+trigger = { event = "Docked" }
+action = { output = "four_digit", show = "time", at = "07:05" }
+[[rules]]
+trigger = { event = "Docked" }
+action = { output = "four_digit", show = "startwatch", pause = true }
+[[rules]]
+trigger = { event = "Docked" }
+action = { output = "four_digit", show = "timer", seconds = 90 }
+[[rules]]
+trigger = { event = "Died" }
+action = { output = "six_digit", show = "count_down", value = 100, period_ms = 1000 }
+[[rules]]
+trigger = { event = "Died" }
+action = { output = "six_digit", show = "reset" }
+"#);
+    let again = Config::from_toml(&c.to_toml().expect("to toml")).expect("reparse");
+    assert_eq!(again, c);
+}
+
+#[test]
+fn spec_errors_name_the_rule() {
+    let mut specs = Config::default().to_specs();
+    specs[2].action = bd_rules::ActionSpec::Led {
+        start: 40,
+        end: 99,
+        color: "FFFFFF".to_owned(),
+        anim: bd_rules::AnimSpec::Solid,
+        period_ms: None,
+    };
+    let err = Config::from_specs(specs).expect_err("bad range");
+    assert_eq!(err.to_string(), "rule 3: LED range out of range");
+}

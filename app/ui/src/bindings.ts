@@ -8,11 +8,33 @@ export const commands = {
 	/**  Serial ports on this machine. */
 	listPorts: () => typedError<Port[], string>(__TAURI_INVOKE("list_ports")),
 	/**  Start following the game and driving the board on `port`. */
-	start: (port: string, journalDir: string | null, config: string | null) => typedError<null, string>(__TAURI_INVOKE("start", { port, journalDir, config })),
+	start: (port: string) => typedError<null, string>(__TAURI_INVOKE("start", { port })),
 	/**  Stop and put the board back in demo mode. */
 	stop: () => typedError<null, string>(__TAURI_INVOKE("stop")),
 	/**  Current state, for a window that opened after events were already sent. */
 	getSnapshot: () => __TAURI_INVOKE<Snapshot>("get_snapshot"),
+	/**  The saved settings, or the defaults on first run. */
+	getSettings: () => typedError<Settings, string>(__TAURI_INVOKE("get_settings")),
+	/**  Save settings. They apply at the next start. */
+	saveSettings: (settings: Settings) => typedError<null, string>(__TAURI_INVOKE("save_settings", { settings })),
+	/**  Where the game's journal is on this machine, if it can be found. */
+	detectJournalDir: () => __TAURI_INVOKE<string | null>("detect_journal_dir"),
+	/**  The rules in use: saved ones, or the built-in ones. */
+	getRules: () => typedError<RuleSpec[], RuleProblem>(__TAURI_INVOKE("get_rules")),
+	/**  The choices for triggers and LCD fields. */
+	ruleOptions: () => __TAURI_INVOKE<RuleOptions>("rule_options"),
+	/**  Check an edit without saving it. On success returns the TOML it would be saved as. */
+	validateRules: (rules: RuleSpec[]) => typedError<string, RuleProblem>(__TAURI_INVOKE("validate_rules", { rules })),
+	/**  Save an edit and, if the pipeline is running, switch it to the new rules at once. */
+	saveRules: (rules: RuleSpec[]) => typedError<null, RuleProblem>(__TAURI_INVOKE("save_rules", { rules })),
+	/**  Drop the saved rules, apply the built-in ones and return them. */
+	resetToDefaults: () => typedError<RuleSpec[], RuleProblem>(__TAURI_INVOKE("reset_to_defaults")),
+	/**  Every command kind with a syntax line and an example. */
+	commandHelp: () => __TAURI_INVOKE<CommandHelp[]>("command_help"),
+	/**  Parse typed text. Returns the line as it would be sent, or what is wrong with it. */
+	checkCommand: (text: string) => typedError<string, string>(__TAURI_INVOKE("check_command", { text })),
+	/**  Send typed text to the board through the running pipeline and return the board's reply. */
+	sendCommand: (text: string) => typedError<string, string>(__TAURI_INVOKE("send_command", { text })),
 };
 
 /** Events */
@@ -23,6 +45,85 @@ export const events = {
 };
 
 /* Types */
+/**  What a rule shows, as written. */
+export type ActionSpec = 
+/**  A range of LEDs. */
+{ output: "led"; 
+/**  First pixel. */
+start: number; 
+/**  Last pixel, exclusive. */
+end: number; 
+/**  `RRGGBB`. */
+color: string; 
+/**  Animation; solid if omitted. */
+anim?: AnimSpec; 
+/**  Animation period; not for solid. */
+period_ms: number | null } | 
+/**  An LCD row. */
+{ output: "lcd"; 
+/**  1 or 2. */
+row: number; 
+/**  Text with `{field}` placeholders. */
+text: string } | 
+/**  The 4-digit display. */
+{ output: "four_digit"; 
+/**  Mode. */
+show: FourShow; 
+/**  `HH:MM`, for the clock only. */
+at: string | null; 
+/**  Start value, for startwatch and timer. */
+seconds: number | null; 
+/**  Freeze, for startwatch and timer. */
+pause?: boolean } | 
+/**  The 6-digit display. */
+{ output: "six_digit"; 
+/**  Mode. */
+show: SixShow; 
+/**  Value to show or count from. */
+value: number | null; 
+/**  Step period, for counting. */
+period_ms: number | null };
+
+/**  LED animation as written. */
+export type AnimSpec = 
+/**  Steady colour. */
+"solid" | 
+/**  On/off. */
+"blink" | 
+/**  Fade in/out. */
+"pulse";
+
+/**  One kind of command, described for the hint list. */
+export type CommandHelp = {
+	/**  Short heading. */
+	title: string,
+	/**  What the command does. */
+	description: string,
+	/**  Shape of the line; `[x]` is optional. */
+	syntax: string,
+	/**  A line that is valid as it stands. */
+	example: string,
+};
+
+/**  A condition on the game state. */
+export type Condition = 
+/**  In a session (between `LoadGame` and `Shutdown`). */
+"in_game" | 
+/**  Landing gear down. */
+"gear_down" | 
+/**  Shields are down. Unknown (no `Status.json` yet) counts as not down. */
+"shields_down" | 
+/**  Hardpoints deployed. */
+"hardpoints_deployed" | 
+/**  Docked. */
+"docked" | 
+/**  FSD charging. */
+"fsd_charging" | 
+/**  Low fuel, by the game's flag or by main tank under 25%. */
+"low_fuel" | 
+/**  In supercruise. */
+"supercruise";
+
 /**  Board connection, plus whether we are trying at all. */
 export type Connection = 
 /**  Not running. */
@@ -35,6 +136,18 @@ export type Connection =
 { kind: "Reconnecting"; 
 /**  Failed attempts since the loss. */
 attempt: number };
+
+/**  A journal event kind, named as in the journal. */
+export type EventKind = "LoadGame" | "Cargo" | "Location" | "FSDJump" | "StartJump" | "SupercruiseEntry" | "SupercruiseExit" | "Docked" | "Undocked" | "Touchdown" | "Liftoff" | "RefuelAll" | "RefuelPartial" | "ReservoirReplenished" | "FuelScoop" | "LaunchSRV" | "Music" | "Died" | "Resurrect" | "Shutdown";
+
+/**  4-digit mode as written. */
+export type FourShow = 
+/**  Clock. */
+"time" | 
+/**  Count-up stopwatch. */
+"startwatch" | 
+/**  Count-down timer. */
+"timer";
 
 /**  The parts of the game state worth showing. */
 export type Game = {
@@ -71,6 +184,55 @@ export type Port = {
 	description: string,
 };
 
+/**  The choices the editor offers; the UI cannot list enum values by itself. */
+export type RuleOptions = {
+	/**  State conditions for a state trigger. */
+	conditions: Condition[],
+	/**  Journal events for an event trigger. */
+	events: EventKind[],
+	/**  Names usable as `{name}` in LCD text. */
+	fields: string[],
+};
+
+/**  What is wrong with a rules edit, for showing next to the rule. */
+export type RuleProblem = {
+	/**  Which rule, counted from 1; `None` when the problem is not about one rule. */
+	rule: number | null,
+	/**  The full message, such as `rule 3: LED range out of range`. */
+	message: string,
+};
+
+/**  A rule as written in the file or edited in the GUI. */
+export type RuleSpec = {
+	/**  What makes it fire. */
+	trigger: Trigger,
+	/**  What it shows. */
+	action: ActionSpec,
+	/**  Higher wins; defaults to 0. */
+	priority?: number,
+};
+
+/**  What the user can change in the Settings tab, plus the port remembered from the last start. */
+export type Settings = {
+	/**  Journal folder; found automatically when `None`. */
+	journal_dir: string | null,
+	/**  Serial port used the last time the pipeline started. */
+	port: string | null,
+	/**  Start the pipeline when the app opens (needs `port`). */
+	auto_start: boolean,
+};
+
+/**  6-digit mode as written. */
+export type SixShow = 
+/**  Show a value. */
+"set" | 
+/**  Show 0. */
+"reset" | 
+/**  Count up. */
+"count_up" | 
+/**  Count down. */
+"count_down";
+
 /**  Everything the UI needs to draw itself from scratch. */
 export type Snapshot = {
 	/**  Board connection. */
@@ -80,6 +242,13 @@ export type Snapshot = {
 	/**  The most recent log lines, oldest first. */
 	log: string[],
 };
+
+/**  What makes a rule fire. */
+export type Trigger = 
+/**  Level-based: active for as long as the condition holds. */
+({ state: Condition }) & { event?: never } | 
+/**  Edge-based: fires when this journal event arrives; the output stays until replaced. */
+({ event: EventKind }) & { state?: never };
 
 /* Tauri Specta runtime */
 async function typedError<T, E>(result: Promise<T>): Promise<{ status: "ok"; data: T } | { status: "error"; error: E }> {

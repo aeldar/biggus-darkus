@@ -11,7 +11,7 @@ use std::{
     path::{Path, PathBuf},
     sync::{
         atomic::{AtomicBool, Ordering},
-        mpsc::Receiver,
+        mpsc::{Receiver, Sender},
     },
     time::Duration,
 };
@@ -20,7 +20,7 @@ use bd_device::{ConnectionState, Link, Transport, retry_delay};
 use bd_journal::{
     GameState, Source, Tailer, apply, apply_status, dir, event::parse_line, status::parse_status,
 };
-use bd_protocol::{Command, Lcd, LedStrip, Mode};
+use bd_protocol::{Command, Lcd, LedStrip, Mode, Reply};
 use bd_rules::{Config, Output, plan};
 
 /// How long to wait for the board's reply; its LED frames block for only a few ms.
@@ -47,6 +47,21 @@ pub enum Report<'a> {
     State(&'a GameState),
     /// The board connection changed.
     Connection(ConnectionState),
+}
+
+/// A request from outside the loop. The loop owns the link, so everything that must reach the
+/// board goes through it, one at a time, instead of racing the loop for the port.
+#[derive(Debug)]
+pub enum Control {
+    /// Send one command and answer with the board's reply, or why it could not be sent.
+    Send {
+        /// What to send.
+        command: Command,
+        /// Where the answer goes; the caller waits on the other end.
+        answer: Sender<Result<Reply, String>>,
+    },
+    /// Use these rules from now on. Hot swap: the board is repainted, the loop keeps running.
+    SetConfig(Config),
 }
 
 /// What the pipeline remembers between inputs.
@@ -139,6 +154,49 @@ fn sync<T: Transport, F: FnMut() -> io::Result<T>>(
     model
 }
 
+/// Handle one request. A manual command is not tracked in the model: the next rule change
+/// overwrites it, which is what someone testing the board expects.
+fn control<T: Transport, F: FnMut() -> io::Result<T>>(
+    (config, model): (Config, Model),
+    request: Control,
+    link: &mut Link<T, F>,
+    report: &mut impl FnMut(Report),
+) -> (Config, Model) {
+    match request {
+        Control::Send { command, answer } => {
+            let result = link.send(&command).map_err(|e| e.to_string());
+            report(Report::Log(match &result {
+                Ok(reply) => format!("manual {command} -> {reply}"),
+                Err(e) => format!("manual {command} failed: {e}"),
+            }));
+            // The asker may have given up waiting; nothing to do then.
+            let _ = answer.send(result);
+            (config, model)
+        }
+        Control::SetConfig(new) => {
+            // While away there is nothing to repaint; the reconnect does it with the new rules.
+            let model = if link.state() == ConnectionState::Connected {
+                sync(&new, model, link, report)
+            } else {
+                model
+            };
+            (new, model)
+        }
+    }
+}
+
+/// Handle every request that is waiting.
+fn drain<T: Transport, F: FnMut() -> io::Result<T>>(
+    queue: &Receiver<Control>,
+    state: (Config, Model),
+    link: &mut Link<T, F>,
+    report: &mut impl FnMut(Report),
+) -> (Config, Model) {
+    queue
+        .try_iter()
+        .fold(state, |st, request| control(st, request, link, report))
+}
+
 /// Read what is new from the game, run it through the pipeline and send the result.
 pub fn tick<S: Source, T: Transport, F: FnMut() -> io::Result<T>>(
     source: &S,
@@ -178,22 +236,25 @@ pub fn run_once<S: Source, T: Transport, F: FnMut() -> io::Result<T>>(
     tick(source, &mut Tailer::new(), config, model, link, report).map(drop)
 }
 
-/// Follow the game until `stop` is set. `wake` carries file-change notifications.
+/// Follow the game until `stop` is set. `wake` carries file-change notifications; whoever
+/// puts something on `queue` should also send a wake-up so it is handled at once.
 pub fn run_loop<S: Source, T: Transport, F: FnMut() -> io::Result<T>>(
     source: &S,
-    config: &Config,
+    mut config: Config,
     link: &mut Link<T, F>,
     wake: &Receiver<()>,
+    queue: &Receiver<Control>,
     stop: &AtomicBool,
     report: &mut impl FnMut(Report),
 ) -> io::Result<()> {
     let mut tailer = Tailer::new();
-    let mut model = sync(config, Model::default(), link, report);
+    let mut model = sync(&config, Model::default(), link, report);
     let mut shown = link.state();
     report(Report::Connection(shown));
     while !stop.load(Ordering::SeqCst) {
+        (config, model) = drain(queue, (config, model), link, report);
         model = match link.state() {
-            ConnectionState::Connected => tick(source, &mut tailer, config, model, link, report)?,
+            ConnectionState::Connected => tick(source, &mut tailer, &config, model, link, report)?,
             state => {
                 // The board lost its picture while away, so repaint on success.
                 let attempt = match state {
@@ -204,7 +265,7 @@ pub fn run_loop<S: Source, T: Transport, F: FnMut() -> io::Result<T>>(
                 // Waiting on `wake` lets Ctrl-C interrupt the pause.
                 let _ = wake.recv_timeout(retry_delay(attempt));
                 match link.try_connect() {
-                    ConnectionState::Connected => sync(config, model, link, report),
+                    ConnectionState::Connected => sync(&config, model, link, report),
                     _ => model,
                 }
             }
@@ -225,7 +286,7 @@ mod tests {
     use bd_device::fake::FakeDevice;
     use bd_journal::ReplaySource;
     use bd_protocol::{Anim, Rgb};
-    use std::path::Path;
+    use std::{path::Path, sync::mpsc};
 
     const FIXTURES: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/../bd-journal/tests/fixtures");
 
@@ -295,5 +356,118 @@ mod tests {
         let inputs: Vec<Input> = lines.iter().map(|l| Input::Line(l)).collect();
         let (_, _, warnings) = pump(&Config::default(), Model::default(), &inputs);
         assert_eq!(warnings.len(), 2);
+    }
+
+    fn ask(command: Command) -> (Control, Receiver<Result<Reply, String>>) {
+        let (answer, rx) = mpsc::channel();
+        (Control::Send { command, answer }, rx)
+    }
+
+    #[test]
+    fn queued_command_reaches_the_board_and_is_answered() {
+        let fake = FakeDevice::new();
+        let mut link = linked(&fake);
+        let (tx, rx) = mpsc::channel();
+        let (request, answer) = ask(Command::Lcd(Lcd::Row(
+            bd_protocol::Row::One,
+            bd_protocol::LcdText::new("hello").ok(),
+        )));
+        tx.send(request).expect("queue");
+        let mut logs = Vec::new();
+        let state = drain(
+            &rx,
+            (Config::default(), Model::default()),
+            &mut link,
+            &mut |r| {
+                if let Report::Log(l) = r {
+                    logs.push(l);
+                }
+            },
+        );
+        assert_eq!(answer.recv().expect("answer"), Ok(Reply::Ok));
+        assert_eq!(fake.board().lcd[0], "hello");
+        assert_eq!(logs, ["manual LCD ROW 1 hello -> OK"]);
+        // The queue is empty now, so a second drain changes nothing.
+        let again = drain(&rx, state.clone(), &mut link, &mut |_| {});
+        assert_eq!(again.1.state, state.1.state);
+    }
+
+    #[test]
+    fn a_board_error_is_a_reply_and_a_missing_board_is_an_error() {
+        let fake = FakeDevice::new();
+        let mut link = linked(&fake);
+        let off = Command::Mode(Mode::Off);
+        let (request, answer) = ask(off.clone());
+        let state = control(
+            (Config::default(), Model::default()),
+            request,
+            &mut link,
+            &mut |_| {},
+        );
+        assert_eq!(answer.recv().expect("answer"), Ok(Reply::Ok));
+        // Off mode refuses hardware commands: an ERR reply, still a successful send.
+        let (request, answer) = ask(Command::Lcd(Lcd::Clear));
+        control(state, request, &mut link, &mut |_| {});
+        assert!(matches!(answer.recv().expect("answer"), Ok(Reply::Err(_))));
+
+        let mut never: Link<FakeDevice, _> = Link::new(
+            || Err::<FakeDevice, _>(io::Error::other("no port")),
+            Duration::from_secs(1),
+        );
+        let (request, answer) = ask(off);
+        control(
+            (Config::default(), Model::default()),
+            request,
+            &mut never,
+            &mut |_| {},
+        );
+        assert_eq!(
+            answer.recv().expect("answer"),
+            Err("not connected".to_owned())
+        );
+    }
+
+    #[test]
+    fn new_rules_repaint_a_connected_board_and_wait_for_a_missing_one() {
+        let fake = FakeDevice::new();
+        let mut link = linked(&fake);
+        let model = Model {
+            state: GameState {
+                in_game: true,
+                system: Some("Sol".to_owned()),
+                ..GameState::default()
+            },
+            ..Model::default()
+        };
+        let rules = Config::from_toml(
+            r#"version = 1
+[[rules]]
+trigger = { state = "in_game" }
+action = { output = "lcd", row = 1, text = "sys {system}" }
+"#,
+        )
+        .expect("rules");
+        let (config, _) = control(
+            (Config::default(), model.clone()),
+            Control::SetConfig(rules.clone()),
+            &mut link,
+            &mut |_| {},
+        );
+        assert_eq!(config, rules);
+        assert_eq!(fake.board().lcd[0], "sys Sol");
+
+        // No board: the rules are kept and nothing is sent (a send would only log failures).
+        let mut never: Link<FakeDevice, _> = Link::new(
+            || Err::<FakeDevice, _>(io::Error::other("no port")),
+            Duration::from_secs(1),
+        );
+        let mut logs = 0;
+        let (config, _) = control(
+            (Config::default(), model),
+            Control::SetConfig(rules.clone()),
+            &mut never,
+            &mut |_| logs += 1,
+        );
+        assert_eq!((config, logs), (rules, 0));
     }
 }

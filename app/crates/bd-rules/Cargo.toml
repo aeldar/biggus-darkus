@@ -7,9 +7,15 @@ publish.workspace = true
 [lints]
 workspace = true
 
+[features]
+# Lets the GUI export the spec types to TypeScript without making specta a core dependency.
+specta = ["dep:specta"]
+
 [dependencies]
 bd-journal = { path = "../bd-journal" }
 bd-protocol = { path = "../bd-protocol" }
 serde = { version = "1", features = ["derive"] }
+# Pinned like in src-tauri: tauri-specta needs this exact version.
+specta = { version = "=2.0.0-rc.26", features = ["derive"], optional = true }
 thiserror = "2"
 toml = "0.9"

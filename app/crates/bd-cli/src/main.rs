@@ -136,7 +136,17 @@ fn go<T: Transport, F: FnMut() -> io::Result<T>>(
                 let _ = tx.send(());
             })
             .map_err(io::Error::other)?;
-            bd_pipeline::run_loop(&DirSource(dir), config, &mut link, &rx, &stop, &mut log)?;
+            // The CLI has no one to send manual commands; the sender is dropped, so the queue stays empty.
+            let (_, queue) = mpsc::channel();
+            bd_pipeline::run_loop(
+                &DirSource(dir),
+                config.clone(),
+                &mut link,
+                &rx,
+                &queue,
+                &stop,
+                &mut log,
+            )?;
         }
     }
     Ok(())

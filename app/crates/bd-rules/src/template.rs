@@ -25,17 +25,35 @@ pub enum Field {
 }
 
 impl Field {
-    fn from_name(name: &str) -> Result<Self, RuleError> {
-        match name {
-            "system" => Ok(Self::System),
-            "station" => Ok(Self::Station),
-            "body" => Ok(Self::Body),
-            "commander" => Ok(Self::Commander),
-            "ship" => Ok(Self::Ship),
-            "fuel" => Ok(Self::Fuel),
-            "cargo" => Ok(Self::Cargo),
-            _ => Err(RuleError::Template(format!("unknown field `{{{name}}}`"))),
+    /// Every field, in the order a picker should list them.
+    pub const ALL: [Self; 7] = [
+        Self::System,
+        Self::Station,
+        Self::Body,
+        Self::Commander,
+        Self::Ship,
+        Self::Fuel,
+        Self::Cargo,
+    ];
+
+    /// The name between the braces.
+    pub fn name(self) -> &'static str {
+        match self {
+            Self::System => "system",
+            Self::Station => "station",
+            Self::Body => "body",
+            Self::Commander => "commander",
+            Self::Ship => "ship",
+            Self::Fuel => "fuel",
+            Self::Cargo => "cargo",
         }
+    }
+
+    fn from_name(name: &str) -> Result<Self, RuleError> {
+        Self::ALL
+            .into_iter()
+            .find(|f| f.name() == name)
+            .ok_or_else(|| RuleError::Template(format!("unknown field `{{{name}}}`")))
     }
 
     // A value we do not know yet renders as nothing.
@@ -95,6 +113,17 @@ impl Template {
         Ok(Self(parts))
     }
 
+    /// The text this was parsed from, so a rule can be shown and saved again.
+    pub fn source(&self) -> String {
+        self.0
+            .iter()
+            .map(|p| match p {
+                Part::Lit(l) => l.clone(),
+                Part::Var(f) => format!("{{{}}}", f.name()),
+            })
+            .collect()
+    }
+
     /// Fills the placeholders. `None` means the row should be blank.
     ///
     /// The result is cut to 16 characters here because names such as star systems and
@@ -114,5 +143,16 @@ impl Template {
             .take(LCD_WIDTH)
             .collect();
         LcdText::new(&text).ok()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn source_gives_back_the_parsed_text() {
+        let text = "ab {system} - {fuel}t";
+        assert_eq!(Template::parse(text).expect("parse").source(), text);
     }
 }

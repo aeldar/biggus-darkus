@@ -8,7 +8,7 @@ use bd_protocol::{
     Anim, ClockTime, Counter, FourDigit, LedRange, OutOfRange, PeriodMs, Rgb, Row, Seconds,
     SixDigit, Watch,
 };
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 use crate::template::Template;
@@ -59,7 +59,8 @@ pub enum RuleError {
 }
 
 /// What makes a rule fire.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "specta", derive(specta::Type))]
 #[serde(rename_all = "snake_case")]
 pub enum Trigger {
     /// Level-based: active for as long as the condition holds.
@@ -69,7 +70,8 @@ pub enum Trigger {
 }
 
 /// A condition on the game state.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "specta", derive(specta::Type))]
 #[serde(rename_all = "snake_case")]
 pub enum Condition {
     /// In a session (between `LoadGame` and `Shutdown`).
@@ -91,6 +93,18 @@ pub enum Condition {
 }
 
 impl Condition {
+    /// Every condition, for pickers. Keep in step with the enum.
+    pub const ALL: [Self; 8] = [
+        Self::InGame,
+        Self::GearDown,
+        Self::ShieldsDown,
+        Self::HardpointsDeployed,
+        Self::Docked,
+        Self::FsdCharging,
+        Self::LowFuel,
+        Self::Supercruise,
+    ];
+
     /// Whether the condition holds in this state.
     pub fn holds(self, s: &GameState) -> bool {
         let flags = s.status.as_ref().map(|st| (st.flags, st.flags2));
@@ -116,7 +130,8 @@ impl Condition {
 }
 
 /// A journal event kind, named as in the journal.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "specta", derive(specta::Type))]
 #[allow(missing_docs)] // names are the journal's own
 pub enum EventKind {
     LoadGame,
@@ -142,6 +157,30 @@ pub enum EventKind {
 }
 
 impl EventKind {
+    /// Every kind, for pickers. Keep in step with the enum.
+    pub const ALL: [Self; 20] = [
+        Self::LoadGame,
+        Self::Cargo,
+        Self::Location,
+        Self::FSDJump,
+        Self::StartJump,
+        Self::SupercruiseEntry,
+        Self::SupercruiseExit,
+        Self::Docked,
+        Self::Undocked,
+        Self::Touchdown,
+        Self::Liftoff,
+        Self::RefuelAll,
+        Self::RefuelPartial,
+        Self::ReservoirReplenished,
+        Self::FuelScoop,
+        Self::LaunchSRV,
+        Self::Music,
+        Self::Died,
+        Self::Resurrect,
+        Self::Shutdown,
+    ];
+
     /// The kind of an event; `None` for events we do not model.
     pub fn of(event: &Event) -> Option<Self> {
         Some(match event {
@@ -223,12 +262,16 @@ impl Default for Config {
 impl Config {
     /// Parses and validates a TOML config.
     pub fn from_toml(text: &str) -> Result<Self, ConfigError> {
-        let raw: RawConfig = toml::from_str(text)?;
-        if raw.version != VERSION {
-            return Err(ConfigError::Version(raw.version));
+        let file: File = toml::from_str(text)?;
+        if file.version != VERSION {
+            return Err(ConfigError::Version(file.version));
         }
-        let rules = raw
-            .rules
+        Self::from_specs(file.rules)
+    }
+
+    /// Validates rules in their editable form; errors name the rule by its position, counted from 1.
+    pub fn from_specs(specs: Vec<RuleSpec>) -> Result<Self, ConfigError> {
+        let rules = specs
             .into_iter()
             .enumerate()
             .map(|(i, r)| {
@@ -240,90 +283,158 @@ impl Config {
             .collect::<Result<_, _>>()?;
         Ok(Self { rules })
     }
+
+    /// The rules in their editable form; the inverse of `from_specs`.
+    pub fn to_specs(&self) -> Vec<RuleSpec> {
+        self.rules.iter().map(Rule::to_spec).collect()
+    }
+
+    /// The config as TOML text that `from_toml` reads back to an equal config.
+    pub fn to_toml(&self) -> Result<String, toml::ser::Error> {
+        toml::to_string(&File {
+            version: VERSION,
+            rules: self.to_specs(),
+        })
+    }
 }
 
-// Raw shapes mirror the file; `deny_unknown_fields` turns typos into errors.
-#[derive(Deserialize)]
+/// The file as written: a version and the rules.
+#[derive(Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-struct RawConfig {
+struct File {
     version: u32,
     #[serde(default)]
-    rules: Vec<RawRule>,
+    rules: Vec<RuleSpec>,
 }
 
-#[derive(Deserialize)]
+// The `*Spec` types are the editable, not yet validated shapes. They mirror the file, so the GUI and
+// the TOML share one definition; `deny_unknown_fields` turns typos into errors.
+
+/// A rule as written in the file or edited in the GUI.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "specta", derive(specta::Type))]
 #[serde(deny_unknown_fields)]
-struct RawRule {
-    trigger: Trigger,
-    action: RawAction,
+pub struct RuleSpec {
+    /// What makes it fire.
+    pub trigger: Trigger,
+    /// What it shows.
+    pub action: ActionSpec,
+    /// Higher wins; defaults to 0.
     #[serde(default)]
-    priority: i32,
+    pub priority: i32,
 }
 
-#[derive(Deserialize, Default, Clone, Copy)]
+/// LED animation as written.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+#[cfg_attr(feature = "specta", derive(specta::Type))]
 #[serde(rename_all = "snake_case")]
-enum RawAnim {
+pub enum AnimSpec {
+    /// Steady colour.
     #[default]
     Solid,
+    /// On/off.
     Blink,
+    /// Fade in/out.
     Pulse,
 }
 
-#[derive(Deserialize, Clone, Copy)]
+/// 4-digit mode as written.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "specta", derive(specta::Type))]
 #[serde(rename_all = "snake_case")]
-enum RawFour {
+pub enum FourShow {
+    /// Clock.
     Time,
+    /// Count-up stopwatch.
     Startwatch,
+    /// Count-down timer.
     Timer,
 }
 
-#[derive(Deserialize, Clone, Copy)]
+/// 6-digit mode as written.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "specta", derive(specta::Type))]
 #[serde(rename_all = "snake_case")]
-enum RawSix {
+pub enum SixShow {
+    /// Show a value.
     Set,
+    /// Show 0.
     Reset,
+    /// Count up.
     CountUp,
+    /// Count down.
     CountDown,
 }
 
 // Numbers are read wide so out-of-range values reach the bd-protocol constructors and
 // get its error instead of a generic serde one.
-#[derive(Deserialize)]
+/// What a rule shows, as written.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(feature = "specta", derive(specta::Type))]
 #[serde(tag = "output", rename_all = "snake_case", deny_unknown_fields)]
-enum RawAction {
+pub enum ActionSpec {
+    /// A range of LEDs.
     Led {
+        /// First pixel.
         start: u32,
+        /// Last pixel, exclusive.
         end: u32,
+        /// `RRGGBB`.
         color: String,
+        /// Animation; solid if omitted.
         #[serde(default)]
-        anim: RawAnim,
+        anim: AnimSpec,
+        /// Animation period; not for solid.
         period_ms: Option<u32>,
     },
+    /// An LCD row.
     Lcd {
+        /// 1 or 2.
         row: u32,
+        /// Text with `{field}` placeholders.
         text: String,
     },
+    /// The 4-digit display.
     FourDigit {
-        show: RawFour,
+        /// Mode.
+        show: FourShow,
+        /// `HH:MM`, for the clock only.
         at: Option<String>,
+        /// Start value, for startwatch and timer.
         seconds: Option<u32>,
+        /// Freeze, for startwatch and timer.
         #[serde(default)]
         pause: bool,
     },
+    /// The 6-digit display.
     SixDigit {
-        show: RawSix,
+        /// Mode.
+        show: SixShow,
+        /// Value to show or count from.
         value: Option<u32>,
+        /// Step period, for counting.
         period_ms: Option<u32>,
     },
 }
 
-impl RawRule {
+impl RuleSpec {
     fn validate(self) -> Result<Rule, RuleError> {
         Ok(Rule {
             trigger: self.trigger,
             action: self.action.validate()?,
             priority: self.priority,
         })
+    }
+}
+
+impl Rule {
+    /// The editable form of this rule.
+    pub fn to_spec(&self) -> RuleSpec {
+        RuleSpec {
+            trigger: self.trigger,
+            action: self.action.to_spec(),
+            priority: self.priority,
+        }
     }
 }
 
@@ -353,7 +464,68 @@ fn period(ms: Option<u32>) -> Result<Option<PeriodMs>, OutOfRange> {
     ms.map(PeriodMs::new).transpose()
 }
 
-impl RawAction {
+impl Action {
+    fn to_spec(&self) -> ActionSpec {
+        match self {
+            Self::Led { range, color, anim } => {
+                let (anim, period) = match anim {
+                    Anim::Solid => (AnimSpec::Solid, None),
+                    Anim::Blink(p) => (AnimSpec::Blink, *p),
+                    Anim::Pulse(p) => (AnimSpec::Pulse, *p),
+                };
+                ActionSpec::Led {
+                    start: range.start().into(),
+                    end: range.end().into(),
+                    color: color.to_string(),
+                    anim,
+                    period_ms: period.map(|p| p.get().into()),
+                }
+            }
+            Self::Lcd { row, template } => ActionSpec::Lcd {
+                row: row.number().into(),
+                text: template.source(),
+            },
+            Self::FourDigit(f) => {
+                // Resume is the absence of both `seconds` and `pause`.
+                let watch = |w: &Watch| match w {
+                    Watch::Resume => (None, false),
+                    Watch::Pause => (None, true),
+                    Watch::Start(s) => (Some(s.get()), false),
+                };
+                let (show, at, (seconds, pause)) = match f {
+                    FourDigit::Time(t) => (FourShow::Time, t.map(|t| t.to_string()), (None, false)),
+                    FourDigit::Startwatch(w) => (FourShow::Startwatch, None, watch(w)),
+                    FourDigit::Timer(w) => (FourShow::Timer, None, watch(w)),
+                };
+                ActionSpec::FourDigit {
+                    show,
+                    at,
+                    seconds,
+                    pause,
+                }
+            }
+            Self::SixDigit(d) => {
+                let (show, value, period) = match d {
+                    SixDigit::Set(v) => (SixShow::Set, Some(v.get()), None),
+                    SixDigit::Reset => (SixShow::Reset, None, None),
+                    SixDigit::CountUp { from, period } => {
+                        (SixShow::CountUp, Some(from.get()), *period)
+                    }
+                    SixDigit::CountDown { from, period } => {
+                        (SixShow::CountDown, Some(from.get()), *period)
+                    }
+                };
+                ActionSpec::SixDigit {
+                    show,
+                    value,
+                    period_ms: period.map(|p| p.get().into()),
+                }
+            }
+        }
+    }
+}
+
+impl ActionSpec {
     fn validate(self) -> Result<Action, RuleError> {
         match self {
             Self::Led {
@@ -367,12 +539,12 @@ impl RawAction {
                 let color = Rgb::from_hex(&color).ok_or(RuleError::Color(color))?;
                 let p = period(period_ms)?;
                 let anim = match (anim, p) {
-                    (RawAnim::Solid, None) => Anim::Solid,
-                    (RawAnim::Solid, Some(_)) => {
+                    (AnimSpec::Solid, None) => Anim::Solid,
+                    (AnimSpec::Solid, Some(_)) => {
                         return Err(RuleError::Fields("a solid LED has no `period_ms`"));
                     }
-                    (RawAnim::Blink, p) => Anim::Blink(p),
-                    (RawAnim::Pulse, p) => Anim::Pulse(p),
+                    (AnimSpec::Blink, p) => Anim::Blink(p),
+                    (AnimSpec::Pulse, p) => Anim::Pulse(p),
                 };
                 Ok(Action::Led { range, color, anim })
             }
@@ -386,11 +558,11 @@ impl RawAction {
                 seconds,
                 pause,
             } => Ok(Action::FourDigit(match (show, at) {
-                (RawFour::Time, at) if seconds.is_none() && !pause => {
+                (FourShow::Time, at) if seconds.is_none() && !pause => {
                     FourDigit::Time(at.as_deref().map(clock).transpose()?)
                 }
-                (RawFour::Startwatch, None) => FourDigit::Startwatch(watch(seconds, pause)?),
-                (RawFour::Timer, None) => FourDigit::Timer(watch(seconds, pause)?),
+                (FourShow::Startwatch, None) => FourDigit::Startwatch(watch(seconds, pause)?),
+                (FourShow::Timer, None) => FourDigit::Timer(watch(seconds, pause)?),
                 _ => {
                     return Err(RuleError::Fields(
                         "4-digit: `at` is only for time; `seconds`/`pause` only for startwatch and timer",
@@ -405,13 +577,13 @@ impl RawAction {
                 let p = period(period_ms)?;
                 let need = || RuleError::Fields("6-digit: this mode needs `value`");
                 Ok(Action::SixDigit(match (show, value, p) {
-                    (RawSix::Set, Some(v), None) => SixDigit::Set(Counter::new(v)?),
-                    (RawSix::Reset, None, None) => SixDigit::Reset,
-                    (RawSix::CountUp, v, period) => SixDigit::CountUp {
+                    (SixShow::Set, Some(v), None) => SixDigit::Set(Counter::new(v)?),
+                    (SixShow::Reset, None, None) => SixDigit::Reset,
+                    (SixShow::CountUp, v, period) => SixDigit::CountUp {
                         from: Counter::new(v.ok_or_else(need)?)?,
                         period,
                     },
-                    (RawSix::CountDown, v, period) => SixDigit::CountDown {
+                    (SixShow::CountDown, v, period) => SixDigit::CountDown {
                         from: Counter::new(v.ok_or_else(need)?)?,
                         period,
                     },
