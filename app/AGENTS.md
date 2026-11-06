@@ -7,6 +7,7 @@ Biggus Darkus board. Start with these:
 - `README.md`: how to build, run, package and test.
 - `docs/protocol.md`: the board protocol (generated; do not edit by hand).
 - `PLAN.md`: the original plan, kept as history.
+- `TASKS.md`: open bugs, things to test and improvements. Update it as work is done.
 - `../biggus-darkus-firmware/docs/`: the firmware side (commands, architecture, hardware).
 - Journal format (official, source of truth): <https://elite-journal.readthedocs.io/en/latest/>
 
