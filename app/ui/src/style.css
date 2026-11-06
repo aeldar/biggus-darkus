@@ -1,0 +1,161 @@
+:root {
+  color-scheme: light dark;
+  --bg: #f6f7f9;
+  --panel: #fff;
+  --text: #1c2330;
+  --muted: #667085;
+  --border: #d9dde5;
+  --accent: #2563eb;
+  --ok: #16a34a;
+  --warn: #d97706;
+  --bad: #dc2626;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #12161d;
+    --panel: #1a2029;
+    --text: #e6e9ef;
+    --muted: #98a2b3;
+    --border: #2d3644;
+    --accent: #6b9bff;
+    --ok: #4ade80;
+    --warn: #fbbf24;
+    --bad: #f87171;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 system-ui, sans-serif;
+}
+
+main {
+  display: grid;
+  gap: 12px;
+  grid-template-rows: auto auto 1fr;
+  height: 100vh;
+  padding: 12px;
+}
+
+section {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  min-height: 0;
+  padding: 12px 16px;
+}
+
+h2 {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+select,
+button {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: inherit;
+  font: inherit;
+  padding: 4px 10px;
+}
+
+select {
+  flex: 1;
+  min-width: 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
+.status {
+  color: var(--muted);
+  font-weight: 600;
+}
+.status.connected {
+  color: var(--ok);
+}
+.status.connecting,
+.status.reconnecting {
+  color: var(--warn);
+}
+
+.error {
+  color: var(--bad);
+  margin: 8px 0 0;
+}
+
+dl {
+  display: grid;
+  gap: 4px 24px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  margin: 0;
+}
+dl > div {
+  display: flex;
+  gap: 8px;
+}
+dt {
+  color: var(--muted);
+  min-width: 80px;
+}
+dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+.flags li {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 12px;
+  padding: 0 10px;
+}
+
+.log {
+  display: flex;
+  flex-direction: column;
+}
+.log pre {
+  flex: 1;
+  font: 12px/1.5 ui-monospace, monospace;
+  margin: 0;
+  overflow: auto;
+}

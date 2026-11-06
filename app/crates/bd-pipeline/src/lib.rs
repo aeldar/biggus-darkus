@@ -1,9 +1,14 @@
-//! The `run` pipeline: journal lines in, board commands out.
+//! The pipeline: journal lines in, board commands out. Shared by the CLI and the GUI.
 //!
 //! `step` and `pump` are pure; `tick`, `run_loop` and `run_once` are the thin I/O shell around them.
+//! The shell never prints: it tells the caller what happened through a `Report` callback.
+
+// Tests may panic on failure; that is how they fail.
+#![cfg_attr(test, allow(clippy::expect_used, clippy::panic))]
 
 use std::{
     io,
+    path::{Path, PathBuf},
     sync::{
         atomic::{AtomicBool, Ordering},
         mpsc::Receiver,
@@ -13,18 +18,42 @@ use std::{
 
 use bd_device::{ConnectionState, Link, Transport, retry_delay};
 use bd_journal::{
-    GameState, Source, Tailer, apply, apply_status, event::parse_line, status::parse_status,
+    GameState, Source, Tailer, apply, apply_status, dir, event::parse_line, status::parse_status,
 };
 use bd_protocol::{Command, Lcd, LedStrip, Mode};
 use bd_rules::{Config, Output, plan};
 
+/// How long to wait for the board's reply; its LED frames block for only a few ms.
+pub const REPLY_TIMEOUT: Duration = Duration::from_secs(1);
+
 /// Safety net for missed file-system notifications.
 const POLL: Duration = Duration::from_secs(2);
+
+/// Where the game's journal is, or `None` on an unsupported system.
+pub fn detect_journal_dir() -> Option<PathBuf> {
+    let platform = dir::current_platform()?;
+    let home = std::env::var_os("HOME").or_else(|| std::env::var_os("USERPROFILE"))?;
+    let xdg = std::env::var_os("XDG_DATA_HOME").map(PathBuf::from);
+    let found = dir::candidates(platform, Path::new(&home), xdg.as_deref());
+    dir::detect(&found, Path::is_dir)
+}
+
+/// Something the caller may want to show. A callback instead of printing keeps the pipeline UI-agnostic.
+#[derive(Debug)]
+pub enum Report<'a> {
+    /// A human-readable line: a command with its reply, a skipped input, a retry.
+    Log(String),
+    /// The game state after it changed.
+    State(&'a GameState),
+    /// The board connection changed.
+    Connection(ConnectionState),
+}
 
 /// What the pipeline remembers between inputs.
 #[derive(Debug, Clone, Default)]
 pub struct Model {
-    state: GameState,
+    /// The game as last understood.
+    pub state: GameState,
     /// What we believe the board shows, so only changes are sent.
     output: Output,
 }
@@ -84,16 +113,17 @@ pub fn resync(config: &Config, model: Model) -> (Model, Vec<Command>) {
     (Model { output, ..model }, commands)
 }
 
-/// Send each command and log it with the reply. Failures are logged, not fatal: the link reconnects.
+/// Send each command and report it with the reply. Failures are reported, not fatal: the link reconnects.
 fn send_all<T: Transport, F: FnMut() -> io::Result<T>>(
     link: &mut Link<T, F>,
     commands: &[Command],
+    report: &mut impl FnMut(Report),
 ) {
     for c in commands {
-        match link.send(c) {
-            Ok(reply) => eprintln!("{c} -> {reply}"),
-            Err(e) => eprintln!("{c} failed: {e}"),
-        }
+        report(Report::Log(match link.send(c) {
+            Ok(reply) => format!("{c} -> {reply}"),
+            Err(e) => format!("{c} failed: {e}"),
+        }));
     }
 }
 
@@ -102,9 +132,10 @@ fn sync<T: Transport, F: FnMut() -> io::Result<T>>(
     config: &Config,
     model: Model,
     link: &mut Link<T, F>,
+    report: &mut impl FnMut(Report),
 ) -> Model {
     let (model, commands) = resync(config, model);
-    send_all(link, &commands);
+    send_all(link, &commands, report);
     model
 }
 
@@ -115,6 +146,7 @@ pub fn tick<S: Source, T: Transport, F: FnMut() -> io::Result<T>>(
     config: &Config,
     model: Model,
     link: &mut Link<T, F>,
+    report: &mut impl FnMut(Report),
 ) -> io::Result<Model> {
     let lines = tailer.poll(source)?;
     // Status last: it is the newest picture of the ship.
@@ -124,9 +156,14 @@ pub fn tick<S: Source, T: Transport, F: FnMut() -> io::Result<T>>(
         .map(|l| Input::Line(l))
         .chain(status.as_deref().map(Input::Status))
         .collect();
+    let before = model.state.clone();
     let (model, commands, warnings) = pump(config, model, &inputs);
-    warnings.iter().for_each(|w| eprintln!("{w}"));
-    send_all(link, &commands);
+    warnings.into_iter().for_each(|w| report(Report::Log(w)));
+    // Status.json is re-read every tick, so only a real change is worth telling.
+    if model.state != before {
+        report(Report::State(&model.state));
+    }
+    send_all(link, &commands, report);
     Ok(model)
 }
 
@@ -135,9 +172,10 @@ pub fn run_once<S: Source, T: Transport, F: FnMut() -> io::Result<T>>(
     source: &S,
     config: &Config,
     link: &mut Link<T, F>,
+    report: &mut impl FnMut(Report),
 ) -> io::Result<()> {
-    let model = sync(config, Model::default(), link);
-    tick(source, &mut Tailer::new(), config, model, link).map(drop)
+    let model = sync(config, Model::default(), link, report);
+    tick(source, &mut Tailer::new(), config, model, link, report).map(drop)
 }
 
 /// Follow the game until `stop` is set. `wake` carries file-change notifications.
@@ -147,30 +185,37 @@ pub fn run_loop<S: Source, T: Transport, F: FnMut() -> io::Result<T>>(
     link: &mut Link<T, F>,
     wake: &Receiver<()>,
     stop: &AtomicBool,
+    report: &mut impl FnMut(Report),
 ) -> io::Result<()> {
     let mut tailer = Tailer::new();
-    let mut model = sync(config, Model::default(), link);
+    let mut model = sync(config, Model::default(), link, report);
+    let mut shown = link.state();
+    report(Report::Connection(shown));
     while !stop.load(Ordering::SeqCst) {
         model = match link.state() {
-            ConnectionState::Connected => tick(source, &mut tailer, config, model, link)?,
+            ConnectionState::Connected => tick(source, &mut tailer, config, model, link, report)?,
             state => {
                 // The board lost its picture while away, so repaint on success.
                 let attempt = match state {
                     ConnectionState::Reconnecting { attempt } => attempt,
                     _ => 0,
                 };
-                eprintln!("board not connected, retrying");
+                report(Report::Log("board not connected, retrying".to_owned()));
                 // Waiting on `wake` lets Ctrl-C interrupt the pause.
                 let _ = wake.recv_timeout(retry_delay(attempt));
                 match link.try_connect() {
-                    ConnectionState::Connected => sync(config, model, link),
+                    ConnectionState::Connected => sync(config, model, link, report),
                     _ => model,
                 }
             }
         };
+        if link.state() != shown {
+            shown = link.state();
+            report(Report::Connection(shown));
+        }
         let _ = wake.recv_timeout(POLL);
     }
-    send_all(link, &[Command::Mode(Mode::Demo)]);
+    send_all(link, &[Command::Mode(Mode::Demo)], report);
     Ok(())
 }
 
@@ -196,7 +241,7 @@ mod tests {
         let fake = FakeDevice::new();
         let mut link = linked(&fake);
         let source = ReplaySource::from_dir(Path::new(FIXTURES)).expect("fixtures");
-        run_once(&source, &Config::default(), &mut link).expect("run");
+        run_once(&source, &Config::default(), &mut link, &mut |_| {}).expect("run");
 
         let board = fake.board();
         assert_eq!(board.lcd[0], "Eranin");
@@ -233,13 +278,14 @@ mod tests {
 
         let fake = FakeDevice::new();
         let mut link = linked(&fake);
-        let model = sync(&Config::default(), Model::default(), &mut link);
+        let model = sync(&Config::default(), Model::default(), &mut link, &mut |_| {});
         let model = tick(
             &source,
             &mut Tailer::new(),
             &Config::default(),
             model,
             &mut link,
+            &mut |_| {},
         )
         .expect("tick");
 

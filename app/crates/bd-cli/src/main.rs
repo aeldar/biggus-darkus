@@ -3,11 +3,9 @@
 // Tests may panic on failure; that is how they fail.
 #![cfg_attr(test, allow(clippy::expect_used, clippy::panic))]
 
-mod run;
-
 use std::{
     io,
-    path::{Path, PathBuf},
+    path::PathBuf,
     process::ExitCode,
     sync::{
         Arc,
@@ -18,14 +16,12 @@ use std::{
 };
 
 use bd_device::{ConnectionState, Device, Link, SerialTransport, Transport, list_ports};
-use bd_journal::{DirSource, ReplaySource, dir, watch::watch};
+use bd_journal::{DirSource, ReplaySource, watch::watch};
+use bd_pipeline::REPLY_TIMEOUT;
 use bd_protocol::{Command, ParseError, Reply};
 use bd_rules::Config;
 use clap::{Parser, Subcommand};
 use thiserror::Error;
-
-/// How long to wait for the board's reply; its LED frames block for only a few ms.
-const REPLY_TIMEOUT: Duration = Duration::from_secs(1);
 
 #[derive(Parser)]
 #[command(about = "Biggus Darkus board tool")]
@@ -87,13 +83,11 @@ enum CliError {
     Connect,
 }
 
-/// Where the game's journal is, or `None` on an unsupported system.
-fn detect_journal_dir() -> Option<PathBuf> {
-    let platform = dir::current_platform()?;
-    let home = std::env::var_os("HOME").or_else(|| std::env::var_os("USERPROFILE"))?;
-    let xdg = std::env::var_os("XDG_DATA_HOME").map(PathBuf::from);
-    let found = dir::candidates(platform, Path::new(&home), xdg.as_deref());
-    dir::detect(&found, Path::is_dir)
+/// The CLI shows only log lines; state and connection changes are for the GUI.
+fn log(report: bd_pipeline::Report) {
+    if let bd_pipeline::Report::Log(line) = report {
+        eprintln!("{line}");
+    }
 }
 
 /// Stands in for the board in `--dry-run`: swallows lines and always answers OK.
@@ -127,7 +121,9 @@ fn go<T: Transport, F: FnMut() -> io::Result<T>>(
         return Err(CliError::Connect);
     }
     match feed {
-        Feed::Replay(dir) => run::run_once(&ReplaySource::from_dir(&dir)?, config, &mut link)?,
+        Feed::Replay(dir) => {
+            bd_pipeline::run_once(&ReplaySource::from_dir(&dir)?, config, &mut link, &mut log)?
+        }
         Feed::Live(dir) => {
             let (tx, rx) = mpsc::channel();
             // Kept alive for the whole loop; dropping it stops the notifications.
@@ -140,7 +136,7 @@ fn go<T: Transport, F: FnMut() -> io::Result<T>>(
                 let _ = tx.send(());
             })
             .map_err(io::Error::other)?;
-            run::run_loop(&DirSource(dir), config, &mut link, &rx, &stop)?;
+            bd_pipeline::run_loop(&DirSource(dir), config, &mut link, &rx, &stop, &mut log)?;
         }
     }
     Ok(())
@@ -162,7 +158,7 @@ fn run_command(
         Some(dir) => Feed::Replay(dir),
         None => Feed::Live(
             journal_dir
-                .or_else(detect_journal_dir)
+                .or_else(bd_pipeline::detect_journal_dir)
                 .ok_or(CliError::NoJournalDir)?,
         ),
     };

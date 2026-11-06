@@ -1,0 +1,30 @@
+[package]
+name = "bd-app"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[lib]
+name = "bd_app_lib"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+bd-device = { path = "../crates/bd-device" }
+bd-journal = { path = "../crates/bd-journal" }
+bd-pipeline = { path = "../crates/bd-pipeline" }
+bd-rules = { path = "../crates/bd-rules" }
+serde = { version = "1", features = ["derive"] }
+tauri = { version = "2", features = [] }
+# tauri-specta 2.0.0-rc.26 pins these exactly, so they must be pinned here too.
+# https://crates.io/crates/tauri-specta/2.0.0-rc.26
+specta = { version = "=2.0.0-rc.26", features = ["derive"] }
+specta-typescript = "=0.0.13"
+tauri-specta = { version = "=2.0.0-rc.26", features = ["derive", "typescript"] }
+
+[dev-dependencies]
+tempfile = "3"

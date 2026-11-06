@@ -34,14 +34,13 @@
         # Registry crates fetched at eval time from Cargo.lock checksums, so checks need no network.
         vendored = pkgs.rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
-        # Rust-only checks need just the toolchain, so they stay fast and light.
+        # The checks build the whole workspace, src-tauri included, so they need the Tauri libraries too.
         cargoCheck = name: cmd:
           pkgs.runCommand name
             {
               src = ./.;
               nativeBuildInputs = [ toolchain pkgs.pkg-config ];
-              # libudev for serialport (via libudev-sys's pkg-config probe).
-              buildInputs = [ pkgs.systemd.dev ];
+              buildInputs = tauriLibs;
             }
             ''
               cp -r $src source && chmod -R u+w source && cd source
@@ -55,6 +54,8 @@
               [source.vendored]
               directory = "${vendored}"
               EOF
+              # tauri::generate_context! embeds ../ui/dist, which is built output and not in git.
+              mkdir -p ui/dist
               ${cmd}
               touch $out
             '';
