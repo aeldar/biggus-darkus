@@ -113,7 +113,10 @@ function GamePanel({ game }: { game: Game }) {
 function LogPanel({ lines }: { lines: string[] }) {
   const end = useRef<HTMLDivElement>(null);
   // Follow the newest line, as a terminal does.
-  useEffect(() => end.current?.scrollIntoView({ block: "end" }), [lines]);
+  // Braces matter: an expression body would hand scrollIntoView's return value to React as a cleanup.
+  useEffect(() => {
+    end.current?.scrollIntoView({ block: "end" });
+  }, [lines]);
   return (
     <section className="log">
       <h2>Commands</h2>

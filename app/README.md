@@ -19,6 +19,9 @@ With direnv and nix-direnv: `direnv allow`. Otherwise: `nix develop`.
 ## Desktop app
 
 `cargo tauri dev` (hot reload) or `cargo tauri build --debug --no-bundle` then `target/debug/bd-app`.
+
+The dev shell sets `GDK_BACKEND=x11`. On native Wayland the webview gets no screen resolution from GTK and renders a blank, unstyled window. Outside the dev shell, start the app with `GDK_BACKEND=x11`.
+
 The window has four tabs. Stopping, or closing the window, puts the board back in `MODE DEMO`.
 
 - **Status:** port picker with Start/Stop, the live game state and a log of commands and replies.

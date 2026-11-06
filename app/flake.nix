@@ -72,6 +72,10 @@
 
           # Tauri loads GTK/WebKit at run time, so the loader must find them.
           LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath tauriLibs;
+
+          # On native Wayland, this WebKitGTK reads no screen resolution from GTK and scales the page
+          # by -1/96, so the window shows a blank, unstyled page. XWayland reports a real one.
+          GDK_BACKEND = "x11";
         };
 
         checks = {
