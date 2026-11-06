@@ -55,6 +55,8 @@ pub struct Link<T, F> {
     timeout: Duration,
     device: Option<Device<T>>,
     state: ConnectionState,
+    /// Why the last connect attempt failed, for the user to read.
+    last_error: Option<String>,
 }
 
 impl<T: Transport, F: FnMut() -> io::Result<T>> Link<T, F> {
@@ -65,12 +67,18 @@ impl<T: Transport, F: FnMut() -> io::Result<T>> Link<T, F> {
             timeout,
             device: None,
             state: ConnectionState::Disconnected,
+            last_error: None,
         }
     }
 
     /// Current state.
     pub fn state(&self) -> ConnectionState {
         self.state
+    }
+
+    /// Why the last connect attempt failed, if it did.
+    pub fn last_error(&self) -> Option<&str> {
+        self.last_error.as_deref()
     }
 
     /// One attempt to open the port and activate the board. The caller sleeps `retry_delay` between attempts.
@@ -82,9 +90,13 @@ impl<T: Transport, F: FnMut() -> io::Result<T>> Link<T, F> {
         let event = match device {
             Ok(device) => {
                 self.device = Some(device);
+                self.last_error = None;
                 LinkEvent::Connected
             }
-            Err(_) => LinkEvent::ConnectFailed,
+            Err(e) => {
+                self.last_error = Some(e.to_string());
+                LinkEvent::ConnectFailed
+            }
         };
         self.state = transition(self.state, event);
         self.state

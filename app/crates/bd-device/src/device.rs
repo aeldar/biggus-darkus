@@ -7,6 +7,9 @@ use thiserror::Error;
 
 use crate::Transport;
 
+/// How many times `connect` asks before giving up; with a 1 s reply timeout that is about 8 s of boot time.
+const CONNECT_ATTEMPTS: u32 = 8;
+
 /// Why a command did not get a usable reply.
 #[derive(Debug, Error)]
 pub enum Error {
@@ -52,10 +55,18 @@ impl<T: Transport> Device<T> {
     }
 
     /// Wrap a transport and switch the board to `ACTIVE`, the only mode that takes commands.
+    ///
+    /// A Nano that just reset can need several seconds before its sketch reads lines, so a silent
+    /// board is asked again; `MODE ACTIVE` is harmless to repeat. Other failures are final.
     pub fn connect(transport: T, timeout: Duration) -> Result<Self, Error> {
         let mut device = Self::new(transport, timeout);
-        device.send_ok(&Command::Mode(Mode::Active))?;
-        Ok(device)
+        let mut attempt = 1;
+        loop {
+            match device.send_ok(&Command::Mode(Mode::Active)) {
+                Err(Error::Timeout) if attempt < CONNECT_ATTEMPTS => attempt += 1,
+                result => return result.map(|()| device),
+            }
+        }
     }
 
     /// Hand the board back to its demo mode, so it is not left blank-and-silent.

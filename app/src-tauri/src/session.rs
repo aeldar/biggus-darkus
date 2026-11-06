@@ -164,7 +164,8 @@ fn run(
     let port = request.port.clone();
     let mut link = Link::new(move || SerialTransport::open(&port), REPLY_TIMEOUT);
     if link.try_connect() != ConnectionState::Connected {
-        return Err(format!("could not connect to {}", request.port));
+        let why = link.last_error().unwrap_or("unknown reason");
+        return Err(format!("could not connect to {}: {why}", request.port));
     }
     run_loop(
         &DirSource(dir),

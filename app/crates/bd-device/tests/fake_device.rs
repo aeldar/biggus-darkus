@@ -5,7 +5,7 @@
 use std::time::Duration;
 
 use bd_device::{
-    ConnectionState, Device, Error, Link,
+    ConnectionState, Device, Error, Link, Transport,
     fake::{FakeDevice, Led},
 };
 use bd_protocol::{Anim, Command, ErrCode, Mode, Reply, Rgb};
@@ -130,4 +130,60 @@ fn link_reconnects_after_unplug() {
     fake.set_unplugged(false);
     assert_eq!(link.try_connect(), ConnectionState::Connected);
     assert_eq!(link.send(&cmd("LCD CLEAR")).expect("reply"), Reply::Ok);
+}
+
+/// A board that ignores its first `skip` lines, like a Nano still booting.
+struct Booting {
+    board: FakeDevice,
+    skip: u32,
+}
+
+impl Transport for Booting {
+    fn read_line(&mut self, timeout: Duration) -> std::io::Result<String> {
+        self.board.read_line(timeout)
+    }
+
+    fn write_line(&mut self, line: &str) -> std::io::Result<()> {
+        match self.skip.checked_sub(1) {
+            Some(left) => {
+                self.skip = left;
+                Ok(())
+            }
+            None => self.board.write_line(line),
+        }
+    }
+
+    fn discard_input(&mut self) -> std::io::Result<()> {
+        self.board.discard_input()
+    }
+}
+
+#[test]
+fn connect_waits_for_a_booting_board() {
+    let transport = Booting {
+        board: FakeDevice::new(),
+        skip: 3,
+    };
+    assert!(Device::connect(transport, TIMEOUT).is_ok());
+}
+
+#[test]
+fn connect_gives_up_on_a_board_that_never_answers() {
+    let transport = Booting {
+        board: FakeDevice::new(),
+        skip: 100,
+    };
+    assert!(matches!(
+        Device::connect(transport, TIMEOUT),
+        Err(Error::Timeout)
+    ));
+}
+
+#[test]
+fn link_keeps_the_reason_a_connect_failed() {
+    let fake = FakeDevice::new();
+    fake.set_silent(true);
+    let mut link = Link::new(move || Ok(fake.clone()), TIMEOUT);
+    link.try_connect();
+    assert_eq!(link.last_error(), Some("no reply from the board"));
 }
