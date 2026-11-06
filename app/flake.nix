@@ -59,8 +59,67 @@
               ${cmd}
               touch $out
             '';
+
+        # Only the manifest and lockfile feed the fetch, so UI source edits do not refetch.
+        uiDeps = pkgs.fetchPnpmDeps {
+          pname = "bd-ui";
+          version = "0.1.0";
+          src = pkgs.lib.fileset.toSource {
+            root = ./ui;
+            fileset = pkgs.lib.fileset.unions [ ./ui/package.json ./ui/pnpm-lock.yaml ];
+          };
+          fetcherVersion = 5;
+          # Update when ui/pnpm-lock.yaml changes: set to pkgs.lib.fakeHash, run `nix build`, copy the
+          # "got:" hash from the error.
+          hash = "sha256-gaJDUvwKBZe5VHVXn8Dg8nNQAETNX1DMuihJUKfMCYs=";
+        };
+
+        # The pinned toolchain, not nixpkgs' own rustc, because specta needs Rust 1.93.
+        rustPlatform = pkgs.makeRustPlatform { cargo = toolchain; rustc = toolchain; };
+
+        # cargo-tauri.hook runs `cargo tauri build --bundles deb` and installs the deb's contents
+        # (binary, .desktop file, icons), so the package matches what the deb ships.
+        biggus-darkus = rustPlatform.buildRustPackage {
+          pname = "biggus-darkus";
+          version = "0.1.0";
+          src = ./.;
+          cargoLock.lockFile = ./Cargo.lock;
+          buildAndTestSubdir = "src-tauri";
+
+          nativeBuildInputs = with pkgs; [
+            cargo-tauri.hook
+            pkg-config
+            wrapGAppsHook3
+            nodejs
+            pnpm
+            pnpmConfigHook
+          ];
+          buildInputs = tauriLibs ++ [ pkgs.glib-networking ];
+
+          pnpmDeps = uiDeps;
+          pnpmRoot = "ui";
+
+          # Tauri runs beforeBuildCommand from a directory where `../ui` does not exist inside the nix
+          # build, so build the UI here and skip that command.
+          preBuild = "pnpm --dir ui build";
+          tauriBuildFlags = [ "--config" ''{"build":{"beforeBuildCommand":""}}'' ];
+
+          # The unit tests run in the checks; the package build only needs the binary.
+          doCheck = false;
+
+          # Wayland workaround, see the dev shell. A wrapper, because the workspace forbids unsafe_code
+          # and so cannot call std::env::set_var.
+          preFixup = ''
+            gappsWrapperArgs+=(--set GDK_BACKEND x11)
+          '';
+
+          meta.mainProgram = "bd-app";
+        };
       in
       {
+        packages.default = biggus-darkus;
+        apps.default = flake-utils.lib.mkApp { drv = biggus-darkus; };
+
         devShells.default = pkgs.mkShell {
           packages = [
             toolchain

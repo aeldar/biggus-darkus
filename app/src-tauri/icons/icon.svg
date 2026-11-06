@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#14161c"/>
+  <!-- LED strip: a row of lit pixels along the bottom -->
+  <g>
+    <rect x="64" y="384" width="56" height="32" rx="8" fill="#ff6a00"/>
+    <rect x="132" y="384" width="56" height="32" rx="8" fill="#ffb000"/>
+    <rect x="200" y="384" width="56" height="32" rx="8" fill="#5be37d"/>
+    <rect x="268" y="384" width="56" height="32" rx="8" fill="#2fd0ff"/>
+    <rect x="336" y="384" width="56" height="32" rx="8" fill="#6a7bff"/>
+    <rect x="404" y="384" width="44" height="32" rx="8" fill="#c15bff"/>
+  </g>
+  <text x="256" y="320" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-weight="900" font-size="230" fill="#ff8a1f">BD</text>
+</svg>

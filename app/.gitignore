@@ -4,3 +4,5 @@ node_modules/
 result
 dist/
 src-tauri/gen/
+*.deb
+*.AppImage

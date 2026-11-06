@@ -13,8 +13,8 @@ With direnv and nix-direnv: `direnv allow`. Otherwise: `nix develop`.
 - All three through nix: `nix flake check`. It builds the whole workspace, `src-tauri` included, so the
   checks get the Tauri system libraries as inputs and an empty `ui/dist` (the app embeds it at compile time).
 - UI checks run in the dev shell, not in `nix flake check`: `cd ui && pnpm install && pnpm exec tsc --noEmit`
-  (`pnpm build` runs the type check too). Vendoring pnpm dependencies offline would need a hash that must
-  be updated with every lockfile change, which is not worth it yet.
+  (`pnpm build` runs the type check too). The package build uses a pnpm hash that needs updating
+  with each lockfile change (see Packaging), so the checks skip it.
 
 ## Desktop app
 
@@ -53,6 +53,28 @@ until `MODE ACTIVE` or a restart.
   regenerate with `UPDATE_BINDINGS=1 cargo test -p bd-app`.
 - Rust is 1.93 because `specta` 2.0.0-rc.26 (used by `tauri-specta`) needs `fmt::from_fn`. `tauri-specta`
   is still a release candidate, so it and `specta` are pinned with `=`.
+
+## Packaging
+
+- Build: `nix build` gives `result/bin/bd-app`, plus the `.desktop` file and icons under `result/share`.
+  Run: `nix run`. Install: `nix profile install .` (or add `packages.default` to a NixOS / home-manager config).
+- The package runs `cargo tauri build --bundles deb` through `cargo-tauri.hook` and installs the deb's
+  contents, so the nix package and the deb ship the same files. The UI is built with pnpm from a hash-pinned
+  dependency fetch (`uiDeps` in `flake.nix`) and embedded in the binary.
+- **Updating the pnpm hash:** after any change to `ui/package.json` or `ui/pnpm-lock.yaml`, set `hash` in
+  `uiDeps` to `pkgs.lib.fakeHash`, run `nix build`, and copy the `got: sha256-...` value from the error.
+- **GDK_BACKEND=x11:** see the Desktop app section for why. The nix wrapper sets it, and the `.desktop`
+  files start the app with `env GDK_BACKEND=x11` (`src-tauri/bd-app.desktop`).
+- **deb:** `cargo tauri build --bundles deb` (in the dev shell) writes
+  `target/release/bundle/deb/Biggus Darkus_0.1.0_amd64.deb`. Built and its contents checked with
+  `dpkg-deb -c`, but not installed on a Debian system. Only the menu entry sets `GDK_BACKEND=x11`: running
+  `bd-app` from a terminal on Wayland needs `GDK_BACKEND=x11 bd-app`.
+- **AppImage: not supported.** `cargo tauri build --bundles appimage` downloads `linuxdeploy` AppImages
+  and runs them, which fails on NixOS (`failed to run linuxdeploy`). It was not tried elsewhere, and its
+  launcher would also need `GDK_BACKEND=x11`, so it is not enabled in `tauri.conf.json`.
+- **Icons:** `src-tauri/icons/icon.svg` is the source. Regenerate the PNGs with
+  `nix shell nixpkgs#librsvg -c rsvg-convert -w <size> -h <size> icon.svg -o <name>.png`
+  for 32 (`32x32.png`), 128 (`128x128.png`), 256 (`256x256.png`) and 512 (`icon.png`).
 
 ## Running
 
