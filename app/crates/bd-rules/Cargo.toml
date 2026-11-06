@@ -6,3 +6,10 @@ publish.workspace = true
 
 [lints]
 workspace = true
+
+[dependencies]
+bd-journal = { path = "../bd-journal" }
+bd-protocol = { path = "../bd-protocol" }
+serde = { version = "1", features = ["derive"] }
+thiserror = "2"
+toml = "0.9"

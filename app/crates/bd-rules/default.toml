@@ -1,0 +1,53 @@
+# Built-in rules. LED layout: 46 pixels. Higher priority wins when rules share an LED or a row.
+version = 1
+
+[[rules]]
+priority = 10
+trigger = { state = "gear_down" }
+action = { output = "led", start = 0, end = 6, color = "00FF00" }
+
+[[rules]]
+priority = 10
+trigger = { state = "hardpoints_deployed" }
+action = { output = "led", start = 6, end = 12, color = "FF0000" }
+
+[[rules]]
+priority = 20
+trigger = { state = "shields_down" }
+action = { output = "led", start = 12, end = 18, color = "FF6000", anim = "blink" }
+
+[[rules]]
+priority = 10
+trigger = { state = "fsd_charging" }
+action = { output = "led", start = 18, end = 28, color = "0040FF", anim = "pulse" }
+
+# Docked and supercruise never overlap in time, but share these pixels.
+[[rules]]
+priority = 10
+trigger = { state = "docked" }
+action = { output = "led", start = 28, end = 34, color = "00FFFF" }
+
+[[rules]]
+priority = 10
+trigger = { state = "supercruise" }
+action = { output = "led", start = 28, end = 34, color = "A000FF" }
+
+[[rules]]
+priority = 30
+trigger = { state = "low_fuel" }
+action = { output = "led", start = 34, end = 46, color = "FFB000", anim = "pulse", period_ms = 600 }
+
+[[rules]]
+priority = 0
+trigger = { state = "in_game" }
+action = { output = "lcd", row = 1, text = "{system}" }
+
+[[rules]]
+priority = 0
+trigger = { state = "in_game" }
+action = { output = "lcd", row = 2, text = "{body}" }
+
+[[rules]]
+priority = 10
+trigger = { state = "docked" }
+action = { output = "lcd", row = 2, text = "{station}" }
