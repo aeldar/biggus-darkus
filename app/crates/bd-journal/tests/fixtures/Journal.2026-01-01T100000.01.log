@@ -1,0 +1,3 @@
+{ "timestamp":"2026-01-01T10:00:00Z", "event":"Fileheader", "part":1, "language":"English/UK", "Odyssey":true, "gameversion":"4.0.0.1450", "build":"r300000/r0 " }
+{ "timestamp":"2026-01-01T10:00:05Z", "event":"LoadGame", "Commander":"OLD", "Ship":"SideWinder", "ShipName":"", "FuelLevel":2.0, "FuelCapacity":2, "GameMode":"Solo", "Credits":1000, "Loan":0 }
+{ "timestamp":"2026-01-01T10:30:00Z", "event":"Shutdown" }

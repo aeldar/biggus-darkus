@@ -1,0 +1,13 @@
+{ "timestamp":"2026-01-02T09:00:00Z", "event":"Fileheader", "part":1, "language":"English/UK", "Odyssey":true, "gameversion":"4.0.0.1450", "build":"r300000/r0 " }
+{ "timestamp":"2026-01-02T09:00:02Z", "event":"Cargo", "Vessel":"Ship", "Count":7, "Inventory":[ { "Name":"gold", "Count":2, "Stolen":0 }, { "Name":"iondistributor", "Name_Localised":"Ion Distributor", "Count":5, "Stolen":0 } ] }
+{ "timestamp":"2026-01-02T09:00:03Z", "event":"Music", "MusicTrack":"MainMenu" }
+{ "timestamp":"2026-01-02T09:00:10Z", "event":"LoadGame", "FID":"F44396", "Commander":"HRC-2", "Horizons":true, "Odyssey":true, "Ship":"FerDeLance", "Ship_Localised":"Fer-de-Lance", "ShipID":19, "ShipName":"jewel of parhoon", "ShipIdent":"hr-17f", "FuelLevel":3.964024, "FuelCapacity":8.000000, "GameMode":"Open", "Credits":2890718739, "Loan":0 }
+{ "timestamp":"2026-01-02T09:00:11Z", "event":"Location", "DistFromStarLS":1056.4, "Docked":true, "StationName":"Jenner Orbital", "StationType":"Outpost", "MarketID":3228883456, "StarSystem":"Luhman 16", "SystemAddress":22960358574928, "StarPos":[5.21875,-1.31250,-1.90625], "Body":"Luhman 16 A", "BodyID":1, "BodyType":"Star", "SystemAllegiance":"Federation", "Population":0 }
+{ "timestamp":"2026-01-02T09:02:00Z", "event":"RefuelAll", "Cost":200, "Amount":4.035976 }
+{ "timestamp":"2026-01-02T09:02:30Z", "event":"Undocked", "StationName":"Jenner Orbital", "MarketID":3228883456 }
+{ "timestamp":"2026-01-02T09:03:10Z", "event":"SupercruiseEntry", "StarSystem":"Luhman 16", "SystemAddress":22960358574928 }
+{ "timestamp":"2026-01-02T09:05:00Z", "event":"StartJump", "JumpType":"Hyperspace", "StarSystem":"Eranin", "SystemAddress":2832631632594, "StarClass":"K" }
+{ "timestamp":"2026-01-02T09:05:16Z", "event":"FSDJump", "StarSystem":"Eranin", "SystemAddress":2832631632594, "StarPos":[-22.84375,36.53125,-1.18750], "SystemAllegiance":"Independent", "SystemEconomy":"$economy_Agri;", "SystemEconomy_Localised":"Agriculture", "Population":450000, "Body":"Eranin", "BodyID":0, "BodyType":"Star", "JumpDist":13.334, "FuelUsed":1.2, "FuelLevel":6.8, "Factions":[ { "Name":"Eranin Expeditionary Institute", "FactionState":"None", "Government":"Cooperative", "Influence":0.17, "Happiness":"$Faction_HappinessBand2;", "MyReputation":0 } ] }
+{ "timestamp":"2026-01-02T09:05:20Z", "event":"Scan", "BodyName":"Eranin", "ScanType":"AutoScan", "StarType":"K" }
+{ "timestamp":"2026-01-02T09:05:25Z", "event":"FuelScoop", "Scooped":0.4987, "Total":7.3 }
+{ "timestamp":"2026-01-02T09:06:00Z", "event":"Music", "MusicTrack":"Supercruise" }

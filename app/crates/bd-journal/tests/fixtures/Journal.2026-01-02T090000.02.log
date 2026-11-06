@@ -1,0 +1,8 @@
+{ "timestamp":"2026-01-02T11:00:00Z", "event":"Fileheader", "part":2, "language":"English/UK", "Odyssey":true, "gameversion":"4.0.0.1450", "build":"r300000/r0 " }
+{ "timestamp":"2026-01-02T11:00:01Z", "event":"Continued", "Part":2 }
+{ "timestamp":"2026-01-02T11:00:02Z", "event":"SupercruiseExit", "Taxi":false, "Multicrew":false, "StarSystem":"Eranin", "SystemAddress":2832631632594, "Body":"Eranin 2", "BodyID":10, "BodyType":"Planet" }
+{ "timestamp":"2026-01-02T11:01:00Z", "event":"Touchdown", "PlayerControlled":true, "Latitude":10.503607, "Longitude":102.78981 }
+{ "timestamp":"2026-01-02T11:05:00Z", "event":"Liftoff", "PlayerControlled":true, "Latitude":10.503607, "Longitude":102.78981 }
+{ "timestamp":"2026-01-02T11:10:00Z", "event":"Died", "KillerName":"$ShipName_Police_Independent;", "KillerShip":"viper", "KillerRank":"Deadly" }
+{ "timestamp":"2026-01-02T11:10:30Z", "event":"Resurrect", "Option":"rebuy", "Cost":5000, "Bankrupt":false }
+{ "timestamp":"2026-01-02T11:11:00Z", "event":"ReservoirReplenished", "FuelMain":7.1, "FuelReservoir":0.4 }
