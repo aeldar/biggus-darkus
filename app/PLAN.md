@@ -9,14 +9,14 @@
   documentation. It is the source of truth for event names, fields, `Status.json` flags and file
   layout. Follow it when implementing `bd-journal`, and link the relevant page in a comment next to
   each modelled event or flag set.
-- **Device serial protocol:** `../biggus-darkus-firmware/docs/commands.md` (until `bd-protocol` takes over as the spec).
+- **Device serial protocol:** `../firmware/docs/commands.md` (until `bd-protocol` takes over as the spec).
 
 ## Layout
 
-One Cargo workspace in `biggus-darkus-app/`. The crates form a one-way chain, and only the last one knows about Tauri.
+One Cargo workspace in `app/`. The crates form a one-way chain, and only the last one knows about Tauri.
 
 ```
-biggus-darkus-app/
+app/
   flake.nix  flake.lock  .envrc  rust-toolchain.toml
   Cargo.toml                 # workspace, shared lints
   crates/

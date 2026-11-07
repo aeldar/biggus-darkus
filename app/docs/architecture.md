@@ -6,7 +6,7 @@ this file is what was actually built and why. Run-and-package details are in `RE
 ## What the app is
 
 A desktop app for the Biggus Darkus board (an Arduino Nano with a 46-pixel LED strip, a 16x2 LCD, a
-4-digit and a 6-digit display; firmware in `../../biggus-darkus-firmware`). It reads Elite Dangerous
+4-digit and a 6-digit display; firmware in `../../firmware`). It reads Elite Dangerous
 journal files and `Status.json`, turns the game state into board commands using user-editable rules, and
 sends them over serial. A GUI sets up the port, the journal folder and the rules.
 
