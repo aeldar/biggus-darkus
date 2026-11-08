@@ -122,7 +122,25 @@ export type Condition =
 /**  Low fuel, by the game's flag or by main tank under 25%. */
 "low_fuel" | 
 /**  In supercruise. */
-"supercruise";
+"supercruise" | 
+/**  Flight assist off. */
+"flight_assist_off" | 
+/**  Ship lights on. */
+"lights_on" | 
+/**  Cargo scoop deployed. */
+"cargo_scoop_deployed" | 
+/**  Silent running on. */
+"silent_running" | 
+/**  Night vision on. */
+"night_vision" | 
+/**  Driving the SRV. */
+"in_srv" | 
+/**  SRV handbrake on. */
+"srv_handbrake" | 
+/**  SRV drive assist on. */
+"srv_drive_assist" | 
+/**  SRV high beam on. */
+"srv_high_beam";
 
 /**  Board connection, plus whether we are trying at all. */
 export type Connection = 

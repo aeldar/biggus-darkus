@@ -90,11 +90,29 @@ pub enum Condition {
     LowFuel,
     /// In supercruise.
     Supercruise,
+    /// Flight assist off.
+    FlightAssistOff,
+    /// Ship lights on.
+    LightsOn,
+    /// Cargo scoop deployed.
+    CargoScoopDeployed,
+    /// Silent running on.
+    SilentRunning,
+    /// Night vision on.
+    NightVision,
+    /// Driving the SRV.
+    InSrv,
+    /// SRV handbrake on.
+    SrvHandbrake,
+    /// SRV drive assist on.
+    SrvDriveAssist,
+    /// SRV high beam on.
+    SrvHighBeam,
 }
 
 impl Condition {
     /// Every condition, for pickers. Keep in step with the enum.
-    pub const ALL: [Self; 8] = [
+    pub const ALL: [Self; 17] = [
         Self::InGame,
         Self::GearDown,
         Self::ShieldsDown,
@@ -103,6 +121,15 @@ impl Condition {
         Self::FsdCharging,
         Self::LowFuel,
         Self::Supercruise,
+        Self::FlightAssistOff,
+        Self::LightsOn,
+        Self::CargoScoopDeployed,
+        Self::SilentRunning,
+        Self::NightVision,
+        Self::InSrv,
+        Self::SrvHandbrake,
+        Self::SrvDriveAssist,
+        Self::SrvHighBeam,
     ];
 
     /// Whether the condition holds in this state.
@@ -125,6 +152,15 @@ impl Condition {
                     || matches!((s.fuel_main, s.fuel_capacity), (Some(m), Some(c)) if c > 0.0 && m < c * 0.25)
             }
             Self::Supercruise => flag(Flags::SUPERCRUISE),
+            Self::FlightAssistOff => flag(Flags::FLIGHT_ASSIST_OFF),
+            Self::LightsOn => flag(Flags::LIGHTS_ON),
+            Self::CargoScoopDeployed => flag(Flags::CARGO_SCOOP_DEPLOYED),
+            Self::SilentRunning => flag(Flags::SILENT_RUNNING),
+            Self::NightVision => flag(Flags::NIGHT_VISION),
+            Self::InSrv => flag(Flags::IN_SRV),
+            Self::SrvHandbrake => flag(Flags::SRV_HANDBRAKE),
+            Self::SrvDriveAssist => flag(Flags::SRV_DRIVE_ASSIST),
+            Self::SrvHighBeam => flag(Flags::SRV_HIGH_BEAM),
         }
     }
 }
