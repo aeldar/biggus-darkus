@@ -1322,8 +1322,8 @@
 		(uuid "917c1862-082b-49fb-83f3-3ae2a695103c")
 	)
 	(gr_rect
-		(start 100 82.22)
-		(end 143.18 100)
+		(start 100 74.6)
+		(end 148.26 115.24)
 		(stroke
 			(width 0.1)
 			(type solid)
