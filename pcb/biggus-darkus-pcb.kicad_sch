@@ -5,7 +5,8 @@
 	(uuid "0d35483a-0b12-46cc-b9f2-896fd6831779")
 	(paper "A4")
 	(title_block
-		(date "sam. 04 avril 2015")
+		(title "Biggus Darkus")
+		(date "2026-11-10")
 	)
 	(lib_symbols
 		(symbol "Connector:Barrel_Jack_Switch"
@@ -921,6 +922,393 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Display_Character:RC1602A"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at -6.35 16.51 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "RC1602A"
+				(at 2.794 16.51 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Display:RC1602A"
+				(at 2.54 -20.32 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "http://www.raystar-optronics.com/down.php?ProID=18"
+				(at 2.54 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "LCD 16x2 Alphanumeric gray backlight, 3 or 5V VDD"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "display LCD dot-matrix"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "*RC1602A*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "RC1602A_0_1"
+				(rectangle
+					(start -7.62 15.24)
+					(end 7.62 -15.24)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "RC1602A_1_1"
+				(pin power_in line
+					(at 0 -17.78 90)
+					(length 2.54)
+					(name "VSS"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 17.78 270)
+					(length 2.54)
+					(name "VDD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 10.16 5.08 180)
+					(length 2.54)
+					(name "VO"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -10.16 12.7 0)
+					(length 2.54)
+					(name "RS"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -10.16 10.16 0)
+					(length 2.54)
+					(name "R/W"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -10.16 7.62 0)
+					(length 2.54)
+					(name "E"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -10.16 5.08 0)
+					(length 2.54)
+					(name "DB0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -10.16 2.54 0)
+					(length 2.54)
+					(name "DB1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -10.16 0 0)
+					(length 2.54)
+					(name "DB2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -10.16 -2.54 0)
+					(length 2.54)
+					(name "DB3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -10.16 -5.08 0)
+					(length 2.54)
+					(name "DB4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "11"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -10.16 -7.62 0)
+					(length 2.54)
+					(name "DB5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "12"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -10.16 -10.16 0)
+					(length 2.54)
+					(name "DB6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "13"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -10.16 -12.7 0)
+					(length 2.54)
+					(name "DB7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "14"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 10.16 -7.62 180)
+					(length 2.54)
+					(name "A/VEE"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "15"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 10.16 -5.08 180)
+					(length 2.54)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "16"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "LED:WS2812B"
 			(pin_names
 				(offset 0.254)
@@ -1185,6 +1573,532 @@
 						(effects
 							(font
 								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "TM1637:TM1637"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at -12.7 27.94 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Value" "TM1637"
+				(at -12.7 -30.48 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Footprint" "TM1637:DIP778W43P254L2612H431Q20N"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "Datasheet" "https://snapeda.s3.amazonaws.com/datasheets/TM1637_V2.5.pdf"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "Description" "LED Drive Control Special Circuit"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "DATASHEET_URL" "https://snapeda.s3.amazonaws.com/datasheets/TM1637_V2.5.pdf"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "MANUFACTURER" "Titan Micro Electronics"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "MAXIMUM_PACKAGE_HEIGHT" "4.31 mm"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "MPN" "TM1637"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "PARTREV" "v2.5"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "SOURCE_URL" "https://www.snapeda.com/parts/TM1637/Titan+Micro+Electronics/view-part/"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "STANDARD" "IPC 7351B"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(symbol "TM1637_0_0"
+				(rectangle
+					(start -12.7 -25.4)
+					(end 12.7 25.4)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin power_in line
+					(at 17.78 -22.86 180)
+					(length 5.08)
+					(name "GND"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 17.78 0 180)
+					(length 5.08)
+					(name "SEG1/KS1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 17.78 -2.54 180)
+					(length 5.08)
+					(name "SEG2/KS2"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 17.78 -5.08 180)
+					(length 5.08)
+					(name "SEG3/KS3"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 17.78 -7.62 180)
+					(length 5.08)
+					(name "SEG4/KS4"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 17.78 -10.16 180)
+					(length 5.08)
+					(name "SEG5/KS5"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 17.78 -12.7 180)
+					(length 5.08)
+					(name "SEG6/KS6"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 17.78 -15.24 180)
+					(length 5.08)
+					(name "SEG7/KS7"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 17.78 -17.78 180)
+					(length 5.08)
+					(name "SEG8/KS8"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "9"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 17.78 5.08 180)
+					(length 5.08)
+					(name "GRID6"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "10"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 17.78 7.62 180)
+					(length 5.08)
+					(name "GRID5"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "11"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 17.78 10.16 180)
+					(length 5.08)
+					(name "GRID4"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "12"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 17.78 12.7 180)
+					(length 5.08)
+					(name "GRID3"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "13"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 17.78 15.24 180)
+					(length 5.08)
+					(name "GRID2"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "14"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 17.78 17.78 180)
+					(length 5.08)
+					(name "GRID1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "15"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 17.78 22.86 180)
+					(length 5.08)
+					(name "VDD"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "16"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -17.78 12.7 0)
+					(length 5.08)
+					(name "DIO"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "17"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin input clock
+					(at -17.78 17.78 0)
+					(length 5.08)
+					(name "CLK"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "18"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -17.78 0 0)
+					(length 5.08)
+					(name "K1"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "19"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -17.78 -2.54 0)
+					(length 5.08)
+					(name "K2"
+						(effects
+							(font
+								(size 1.016 1.016)
+							)
+						)
+					)
+					(number "20"
+						(effects
+							(font
+								(size 1.016 1.016)
 							)
 						)
 					)
@@ -1725,6 +2639,30 @@
 			(embedded_fonts no)
 		)
 	)
+	(junction
+		(at 119.38 88.9)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2adb307f-58f5-4c5f-bc57-51c666581b9d")
+	)
+	(junction
+		(at 121.92 93.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "678aa22c-2c4e-44ed-a047-226513c7cb26")
+	)
+	(junction
+		(at 119.38 58.42)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b6764105-713a-46ac-9e26-c418a1b16b6e")
+	)
+	(junction
+		(at 121.92 99.06)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e4957ce7-0707-44c9-8e96-890aaeb2a111")
+	)
 	(wire
 		(pts
 			(xy 144.78 93.98) (xy 160.02 93.98)
@@ -1767,13 +2705,13 @@
 	)
 	(wire
 		(pts
-			(xy 119.38 58.42) (xy 119.38 88.9)
+			(xy 207.01 87.63) (xy 207.01 111.76)
 		)
 		(stroke
 			(width 0)
-			(type solid)
+			(type default)
 		)
-		(uuid "22a763f9-a4ea-4493-a861-a12440c0ac58")
+		(uuid "20629d56-368f-410b-b43a-a292d7e7cd1e")
 	)
 	(wire
 		(pts
@@ -1784,6 +2722,46 @@
 			(type solid)
 		)
 		(uuid "22a763f9-a4ea-4493-a861-a12440c0ac59")
+	)
+	(wire
+		(pts
+			(xy 49.53 24.13) (xy 86.36 24.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "245b1a09-0195-41a5-a136-35e7fd70711f")
+	)
+	(wire
+		(pts
+			(xy 119.38 58.42) (xy 119.38 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2be35081-57b2-4e3f-9e53-205ab63fd49c")
+	)
+	(wire
+		(pts
+			(xy 81.28 29.21) (xy 81.28 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2cbaa9c5-ebd5-4e6f-beba-3ec89a850a03")
+	)
+	(wire
+		(pts
+			(xy 177.8 81.28) (xy 189.23 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2f0b41e7-6357-4a9c-af47-b2f02ed6bd73")
 	)
 	(wire
 		(pts
@@ -1807,6 +2785,36 @@
 	)
 	(wire
 		(pts
+			(xy 189.23 92.71) (xy 214.63 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3ee00795-72bf-4642-8c7d-a4eae767e9fd")
+	)
+	(wire
+		(pts
+			(xy 207.01 111.76) (xy 121.92 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3f84622b-0fdb-49af-9cf9-2a7f47c0cf06")
+	)
+	(wire
+		(pts
+			(xy 121.92 99.06) (xy 121.92 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4239dbc8-c90e-43e2-b0b3-9c52e7a6ed30")
+	)
+	(wire
+		(pts
 			(xy 144.78 71.12) (xy 160.02 71.12)
 		)
 		(stroke
@@ -1827,6 +2835,26 @@
 	)
 	(wire
 		(pts
+			(xy 81.28 93.98) (xy 121.92 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5da6ec1b-e5ef-4c78-a1ce-09f7b37286fc")
+	)
+	(wire
+		(pts
+			(xy 121.92 58.42) (xy 121.92 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "610b1988-71c8-446a-be23-ec0a5461a8b8")
+	)
+	(wire
+		(pts
 			(xy 144.78 86.36) (xy 160.02 86.36)
 		)
 		(stroke
@@ -1837,13 +2865,13 @@
 	)
 	(wire
 		(pts
-			(xy 177.8 81.28) (xy 194.31 81.28)
+			(xy 86.36 24.13) (xy 86.36 88.9)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "7758834f-c698-4c99-8eba-afb7b9a73f88")
+		(uuid "69475a63-77c3-4831-a4f8-75e4cd2eb666")
 	)
 	(wire
 		(pts
@@ -1857,6 +2885,16 @@
 	)
 	(wire
 		(pts
+			(xy 119.38 29.21) (xy 119.38 58.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8065e64e-0302-4dc3-a16e-872d3fa91131")
+	)
+	(wire
+		(pts
 			(xy 144.78 78.74) (xy 160.02 78.74)
 		)
 		(stroke
@@ -1864,16 +2902,6 @@
 			(type solid)
 		)
 		(uuid "80efb8ec-d89c-4864-9595-9b53a7277783")
-	)
-	(wire
-		(pts
-			(xy 121.92 58.42) (xy 121.92 63.5)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "827b62c7-27f3-4490-8202-02430e85a9da")
 	)
 	(wire
 		(pts
@@ -1927,6 +2955,16 @@
 	)
 	(wire
 		(pts
+			(xy 121.92 93.98) (xy 121.92 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8e731b98-d4b0-474b-969e-d5ef4592608c")
+	)
+	(wire
+		(pts
 			(xy 144.78 76.2) (xy 160.02 76.2)
 		)
 		(stroke
@@ -1947,6 +2985,16 @@
 	)
 	(wire
 		(pts
+			(xy 207.01 29.21) (xy 119.38 29.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9ec66a2b-60a8-47fb-a8e8-7a89d440d1b9")
+	)
+	(wire
+		(pts
 			(xy 106.68 68.58) (xy 124.46 68.58)
 		)
 		(stroke
@@ -1954,6 +3002,26 @@
 			(type solid)
 		)
 		(uuid "a15d73e3-c101-4530-98e6-366a90e4c045")
+	)
+	(wire
+		(pts
+			(xy 207.01 72.39) (xy 207.01 29.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a9e3d7aa-e352-4a37-b5bb-5daeb765a34f")
+	)
+	(wire
+		(pts
+			(xy 189.23 81.28) (xy 189.23 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "acb31756-59f6-44cf-8d4c-6e279bd2763c")
 	)
 	(wire
 		(pts
@@ -1974,6 +3042,26 @@
 			(type solid)
 		)
 		(uuid "b4914b85-2b16-49d0-94eb-cb1035996914")
+	)
+	(wire
+		(pts
+			(xy 86.36 88.9) (xy 119.38 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b74af9b8-ed49-42bc-bacb-43f4a593f8c6")
+	)
+	(wire
+		(pts
+			(xy 214.63 92.71) (xy 214.63 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bae3c573-0538-49d0-b11f-0d3d71c98b38")
 	)
 	(wire
 		(pts
@@ -2037,6 +3125,16 @@
 	)
 	(wire
 		(pts
+			(xy 49.53 29.21) (xy 81.28 29.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "de4943f8-1916-49ba-a096-af86972801a0")
+	)
+	(wire
+		(pts
 			(xy 106.68 83.82) (xy 124.46 83.82)
 		)
 		(stroke
@@ -2044,16 +3142,6 @@
 			(type solid)
 		)
 		(uuid "e5147152-2718-4764-b0b2-bc208d89a5a8")
-	)
-	(wire
-		(pts
-			(xy 121.92 93.98) (xy 121.92 99.06)
-		)
-		(stroke
-			(width 0)
-			(type solid)
-		)
-		(uuid "f5c098e0-fc36-4b6f-9b18-934da332c8fc")
 	)
 	(wire
 		(pts
@@ -2574,7 +3662,7 @@
 	)
 	(symbol
 		(lib_id "Connector:Barrel_Jack_Switch")
-		(at 133.35 142.24 0)
+		(at 41.91 26.67 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2585,7 +3673,7 @@
 		(fields_autoplaced yes)
 		(uuid "0e0d8d9b-2d50-4690-80e9-8ff4e35b1c2e")
 		(property "Reference" "J3"
-			(at 133.35 133.35 0)
+			(at 41.91 17.78 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2595,7 +3683,7 @@
 			)
 		)
 		(property "Value" "Barrel_Jack_Switch"
-			(at 133.35 135.89 0)
+			(at 41.91 20.32 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2605,7 +3693,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 134.62 143.256 0)
+			(at 43.18 27.686 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2616,7 +3704,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 134.62 143.256 0)
+			(at 43.18 27.686 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2627,7 +3715,7 @@
 			)
 		)
 		(property "Description" "DC Barrel Jack with an internal switch"
-			(at 133.35 142.24 0)
+			(at 41.91 26.67 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2737,7 +3825,7 @@
 	)
 	(symbol
 		(lib_id "LED:WS2812B")
-		(at 201.93 81.28 0)
+		(at 207.01 80.01 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2748,7 +3836,7 @@
 		(fields_autoplaced yes)
 		(uuid "1486a477-4d45-4c20-8077-1d085f705b0a")
 		(property "Reference" "D1"
-			(at 213.36 74.8598 0)
+			(at 218.44 73.5898 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2758,7 +3846,7 @@
 			)
 		)
 		(property "Value" "WS2812B"
-			(at 213.36 77.3998 0)
+			(at 218.44 76.1298 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2768,7 +3856,7 @@
 			)
 		)
 		(property "Footprint" "LED_SMD:LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm"
-			(at 203.2 88.9 0)
+			(at 208.28 87.63 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2780,7 +3868,7 @@
 			)
 		)
 		(property "Datasheet" "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf"
-			(at 204.47 90.805 0)
+			(at 209.55 89.535 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2792,7 +3880,7 @@
 			)
 		)
 		(property "Description" "RGB LED with integrated controller"
-			(at 201.93 81.28 0)
+			(at 207.01 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2980,6 +4068,130 @@
 		)
 	)
 	(symbol
+		(lib_id "Display_Character:RC1602A")
+		(at 199.39 139.7 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "76e8f792-6c66-40a3-80a3-2ea11508a8c0")
+		(property "Reference" "U1"
+			(at 201.5333 119.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "RC1602A"
+			(at 201.5333 121.92 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Display:RC1602A"
+			(at 201.93 160.02 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "http://www.raystar-optronics.com/down.php?ProID=18"
+			(at 201.93 142.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "LCD 16x2 Alphanumeric gray backlight, 3 or 5V VDD"
+			(at 199.39 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "15"
+			(uuid "b0f1fb33-0348-430b-a591-59ef6f0ce040")
+		)
+		(pin "2"
+			(uuid "b72dfd47-727e-4613-9956-b849b246dc5a")
+		)
+		(pin "1"
+			(uuid "7c40c9c5-f4f3-438d-90e1-256f14b33147")
+		)
+		(pin "8"
+			(uuid "857efb9f-34fa-4a04-881d-61a179445e6a")
+		)
+		(pin "3"
+			(uuid "13ea9f82-2deb-49c2-9877-1d73840f7fbd")
+		)
+		(pin "11"
+			(uuid "0b8c930b-a750-4373-a706-590894ffb543")
+		)
+		(pin "16"
+			(uuid "b4414578-5e5a-4379-a559-ce5232396805")
+		)
+		(pin "9"
+			(uuid "cee3280f-dda1-4974-91ff-848e67d15b94")
+		)
+		(pin "12"
+			(uuid "96ef7ce4-15e7-4598-bd64-cb429b4e96aa")
+		)
+		(pin "13"
+			(uuid "bde9964a-8b32-46a6-9a11-48f1066a858d")
+		)
+		(pin "10"
+			(uuid "476a99a5-f2bb-4b0b-93b5-3d8cabfd99c9")
+		)
+		(pin "14"
+			(uuid "80e92c9b-bfa7-4ae5-8c45-f0082cd69816")
+		)
+		(pin "4"
+			(uuid "8b6e6099-bc77-4325-a20b-72e766fc427f")
+		)
+		(pin "5"
+			(uuid "754b0d21-a922-4682-a8a3-ba181f913490")
+		)
+		(pin "7"
+			(uuid "0045a0ce-7aa7-475f-9f91-79db3cc2cec3")
+		)
+		(pin "6"
+			(uuid "6a09c3cd-075b-45b0-b2b5-17a653a5fbf3")
+		)
+		(instances
+			(project "biggus-darkus-pcb"
+				(path "/0d35483a-0b12-46cc-b9f2-896fd6831779"
+					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:VCC")
 		(at 116.84 58.42 0)
 		(unit 1)
@@ -3052,6 +4264,227 @@
 			(project "biggus-darkus-pcb"
 				(path "/0d35483a-0b12-46cc-b9f2-896fd6831779"
 					(reference "#PWR0101")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "TM1637:TM1637")
+		(at 71.12 147.32 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "93138149-a3a0-4226-b73b-56aa7deb0edb")
+		(property "Reference" "U3"
+			(at 71.12 116.84 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TM1637"
+			(at 71.12 119.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TM1637:DIP778W43P254L2612H431Q20N"
+			(at 71.12 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Datasheet" "https://snapeda.s3.amazonaws.com/datasheets/TM1637_V2.5.pdf"
+			(at 71.12 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Description" "LED Drive Control Special Circuit"
+			(at 71.12 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "DATASHEET_URL" "https://snapeda.s3.amazonaws.com/datasheets/TM1637_V2.5.pdf"
+			(at 71.12 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "MANUFACTURER" "Titan Micro Electronics"
+			(at 71.12 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "MAXIMUM_PACKAGE_HEIGHT" "4.31 mm"
+			(at 71.12 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "MPN" "TM1637"
+			(at 71.12 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "PARTREV" "v2.5"
+			(at 71.12 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "SOURCE_URL" "https://www.snapeda.com/parts/TM1637/Titan+Micro+Electronics/view-part/"
+			(at 71.12 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "STANDARD" "IPC 7351B"
+			(at 71.12 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(pin "17"
+			(uuid "908d5bd6-b63c-465f-ab43-6bf86d618e22")
+		)
+		(pin "10"
+			(uuid "21ee00bc-4213-440f-aded-671f0c16346a")
+		)
+		(pin "15"
+			(uuid "e71e8d3c-2fbd-4747-8627-dfc24884ee8e")
+		)
+		(pin "14"
+			(uuid "4085a130-8780-46f8-869e-171d8dc015a5")
+		)
+		(pin "19"
+			(uuid "d1815c17-0543-4acd-88cd-d449b33b0a86")
+		)
+		(pin "18"
+			(uuid "aab0c800-c4ce-4c3b-bf07-213f4ab658a3")
+		)
+		(pin "20"
+			(uuid "eb0344b2-e8f3-4b25-8df0-f7225ae33680")
+		)
+		(pin "13"
+			(uuid "df971f03-b3a8-4259-9af1-ebe95ee4d8e1")
+		)
+		(pin "2"
+			(uuid "813be0df-124f-4e31-acf2-8fd46956da75")
+		)
+		(pin "1"
+			(uuid "c93c044c-81bb-4c10-a299-3bcd39a36097")
+		)
+		(pin "3"
+			(uuid "ca40239c-8b7a-42ec-8d49-f80c0289223e")
+		)
+		(pin "4"
+			(uuid "3f93894a-3c1e-4348-ae4d-a35dd03929c4")
+		)
+		(pin "7"
+			(uuid "bd801d66-787c-476e-ac46-575e2e52e53c")
+		)
+		(pin "6"
+			(uuid "3677b64e-7621-4b92-b874-57cbab795ae8")
+		)
+		(pin "5"
+			(uuid "da5455ab-8f1d-4595-bf55-e463d4043b89")
+		)
+		(pin "11"
+			(uuid "4143b727-d067-4a84-83af-4ab695162289")
+		)
+		(pin "9"
+			(uuid "c381ada8-83dd-4f50-bafb-74d6411c3264")
+		)
+		(pin "16"
+			(uuid "f42573d7-21a8-4e68-8aa3-a26711494479")
+		)
+		(pin "12"
+			(uuid "b8d93eb2-9aac-4b72-9a6b-862083aef01d")
+		)
+		(pin "8"
+			(uuid "911a148f-2d72-4fd5-8abc-e4a415da980a")
+		)
+		(instances
+			(project "biggus-darkus-pcb"
+				(path "/0d35483a-0b12-46cc-b9f2-896fd6831779"
+					(reference "U3")
 					(unit 1)
 				)
 			)
@@ -3206,6 +4639,227 @@
 			(project "biggus-darkus-pcb"
 				(path "/0d35483a-0b12-46cc-b9f2-896fd6831779"
 					(reference "#PWR0104")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "TM1637:TM1637")
+		(at 125.73 148.59 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ff934ac0-0e1c-4f91-abde-df32396588d7")
+		(property "Reference" "U2"
+			(at 125.73 118.11 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TM1637"
+			(at 125.73 120.65 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "TM1637:DIP778W43P254L2612H431Q20N"
+			(at 125.73 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Datasheet" "https://snapeda.s3.amazonaws.com/datasheets/TM1637_V2.5.pdf"
+			(at 125.73 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "Description" "LED Drive Control Special Circuit"
+			(at 125.73 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "DATASHEET_URL" "https://snapeda.s3.amazonaws.com/datasheets/TM1637_V2.5.pdf"
+			(at 125.73 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "MANUFACTURER" "Titan Micro Electronics"
+			(at 125.73 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "MAXIMUM_PACKAGE_HEIGHT" "4.31 mm"
+			(at 125.73 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "MPN" "TM1637"
+			(at 125.73 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "PARTREV" "v2.5"
+			(at 125.73 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "SOURCE_URL" "https://www.snapeda.com/parts/TM1637/Titan+Micro+Electronics/view-part/"
+			(at 125.73 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(property "STANDARD" "IPC 7351B"
+			(at 125.73 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify bottom)
+			)
+		)
+		(pin "3"
+			(uuid "674be7e0-939f-412f-8f59-5c67a2343341")
+		)
+		(pin "18"
+			(uuid "e528843a-454e-4024-aa9d-56d703fa968a")
+		)
+		(pin "8"
+			(uuid "350e5b9e-0451-4012-9de8-0e1a532057d2")
+		)
+		(pin "17"
+			(uuid "53d1d3b3-b723-4bb3-8f07-3fcad0e0b949")
+		)
+		(pin "5"
+			(uuid "7ed86c78-4a3f-4a18-b829-8a3b5be157e3")
+		)
+		(pin "9"
+			(uuid "0e10c645-b223-4eae-b281-bbd3707b53c6")
+		)
+		(pin "13"
+			(uuid "e9bd86af-6c37-4a80-b4e7-2bd5c7a51699")
+		)
+		(pin "10"
+			(uuid "e47973f2-5dbd-4131-abf1-291e689d7fa4")
+		)
+		(pin "7"
+			(uuid "3b6ea78a-9d44-4a00-9d75-62d569859783")
+		)
+		(pin "19"
+			(uuid "3ba71ac3-0d5f-4f96-9b5f-4969ab4b81d4")
+		)
+		(pin "6"
+			(uuid "0217d7bb-a2e6-4eb5-a01d-42b267ed292b")
+		)
+		(pin "4"
+			(uuid "3a1b1208-b5dc-40d0-81b4-c9f151c65610")
+		)
+		(pin "14"
+			(uuid "f9f9bc9a-34f4-4625-aef1-b2292fba5e90")
+		)
+		(pin "15"
+			(uuid "7babe71c-a70e-48f7-800a-6637b5d965b1")
+		)
+		(pin "16"
+			(uuid "30e79659-3b1e-4254-b40c-bf34c37b4954")
+		)
+		(pin "11"
+			(uuid "aefe4f8e-29fe-4f7a-9aff-41ca14c876be")
+		)
+		(pin "1"
+			(uuid "ee17e587-08d3-45fb-9f0e-0d3b80fe5a89")
+		)
+		(pin "12"
+			(uuid "02cd8a7a-3577-4e79-b9c7-06caff25ae1f")
+		)
+		(pin "2"
+			(uuid "724b7fcd-e7d4-40fc-baa8-b4b4ad88a315")
+		)
+		(pin "20"
+			(uuid "79264239-9ccd-4bee-ad68-33dde4b7c749")
+		)
+		(instances
+			(project "biggus-darkus-pcb"
+				(path "/0d35483a-0b12-46cc-b9f2-896fd6831779"
+					(reference "U2")
 					(unit 1)
 				)
 			)
