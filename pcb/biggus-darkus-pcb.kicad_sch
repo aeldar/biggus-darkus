@@ -2691,6 +2691,26 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 151.13) (xy 237.49 151.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "64a11686-3893-481b-afdf-c05ad77369c4")
+	)
+	(wire
+		(pts
+			(xy 224.79 146.05) (xy 237.49 146.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "65eec646-bfd8-4559-824e-f1508842efdc")
+	)
+	(wire
+		(pts
 			(xy 39.37 97.79) (xy 53.34 97.79)
 		)
 		(stroke
@@ -2901,6 +2921,16 @@
 	)
 	(wire
 		(pts
+			(xy 224.79 143.51) (xy 237.49 143.51)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ad72fd29-0860-4108-8637-13921fade019")
+	)
+	(wire
+		(pts
 			(xy 224.79 80.01) (xy 237.49 80.01)
 		)
 		(stroke
@@ -2958,6 +2988,16 @@
 			(type default)
 		)
 		(uuid "c18fba3b-3ecb-4a70-858d-c111d554c510")
+	)
+	(wire
+		(pts
+			(xy 224.79 148.59) (xy 237.49 148.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c6db669d-c0e9-4fda-abda-060fe4df3772")
 	)
 	(wire
 		(pts
@@ -3169,6 +3209,16 @@
 		)
 		(uuid "3568c226-c5f9-4ea9-821a-aaef9fed4ede")
 	)
+	(label "A0"
+		(at 224.79 151.13 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "46eeb47b-f296-40e1-96bc-755279b7a0a1")
+	)
 	(label "D13{slash}SCK"
 		(at 110.49 86.36 0)
 		(effects
@@ -3178,6 +3228,16 @@
 			(justify left bottom)
 		)
 		(uuid "4df5306c-d1f8-4f35-9e22-6412b2c40f94")
+	)
+	(label "A2"
+		(at 224.79 146.05 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "4df65f44-49a1-46e4-b572-497170b9d6be")
 	)
 	(label "A7"
 		(at 110.49 111.76 0)
@@ -3208,6 +3268,16 @@
 			(justify right bottom)
 		)
 		(uuid "61132bd2-4cc5-4366-9262-e88893dc20a1")
+	)
+	(label "A1"
+		(at 224.79 148.59 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6fcbac38-2bee-4c3b-bb50-a3b24594611e")
 	)
 	(label "*D5"
 		(at 224.79 97.79 0)
@@ -5046,6 +5116,85 @@
 	)
 	(symbol
 		(lib_id "power:GND")
+		(at 224.79 143.51 270)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "945d480a-a49a-4e2c-996e-15b464fb580c")
+		(property "Reference" "#PWR011"
+			(at 218.44 143.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 220.98 143.5099 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 224.79 143.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 224.79 143.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 224.79 143.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "67da0e5e-75fd-4d31-bbd6-e4242a6388c5")
+		)
+		(instances
+			(project "biggus-darkus-pcb"
+				(path "/0d35483a-0b12-46cc-b9f2-896fd6831779"
+					(reference "#PWR011")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
 		(at 224.79 72.39 270)
 		(unit 1)
 		(body_style 1)
@@ -5838,6 +5987,94 @@
 			(project "biggus-darkus-pcb"
 				(path "/0d35483a-0b12-46cc-b9f2-896fd6831779"
 					(reference "#PWR0104")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x04")
+		(at 242.57 146.05 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "f3affa19-6976-4b7c-b8a7-6c2be8cdcdab")
+		(property "Reference" "J8"
+			(at 245.11 146.0499 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "BUTTONS"
+			(at 245.11 148.5899 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_JST:JST_XH_S4B-XH-A_1x04_P2.50mm_Horizontal"
+			(at 242.57 146.05 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 242.57 146.05 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 242.57 146.05 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "979a1a4b-0d4f-4cb6-ac2f-59f4f5c80fcf")
+		)
+		(pin "4"
+			(uuid "d58efdad-e12b-4ef5-b3e0-bc6c9154d853")
+		)
+		(pin "3"
+			(uuid "1d48366a-dfdd-4802-932d-bdcb82be4451")
+		)
+		(pin "2"
+			(uuid "10796202-ec99-47fe-8075-dc99fdbcd713")
+		)
+		(instances
+			(project "biggus-darkus-pcb"
+				(path "/0d35483a-0b12-46cc-b9f2-896fd6831779"
+					(reference "J8")
 					(unit 1)
 				)
 			)
