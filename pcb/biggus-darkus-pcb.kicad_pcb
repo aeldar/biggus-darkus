@@ -92,7 +92,7 @@
 		(capping no)
 		(filling no)
 		(aux_axis_origin 100 100)
-		(grid_origin 100 100)
+		(grid_origin 103.81 83.49)
 		(pcbplotparams
 			(layerselection 0x00000000_00000000_00000000_000000a5)
 			(plot_on_all_layers_selection 0x00000000_00000000_00000000_00000000)
@@ -949,13 +949,13 @@
 	(footprint "Connector_JST:JST_XH_S4B-XH-A_1x04_P2.50mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "03cba1a8-378d-401c-9680-7855d04110f1")
-		(at 110.595 110.16)
+		(at 111.55 108.89)
 		(descr "JST XH series connector, S4B-XH-A (http://www.jst-mfg.com/product/pdf/eng/eXH.pdf)")
 		(tags "connector JST XH horizontal")
 		(property "Reference" "J8"
 			(at 3.75 -3.51 0)
 			(layer "F.SilkS")
-			(uuid "7f0bb1aa-5da6-432d-ad03-1eea60449981")
+			(uuid "836de3ca-0c54-4b63-9c02-70d0068bb764")
 			(effects
 				(font
 					(size 1 1)
@@ -966,7 +966,7 @@
 		(property "Value" "BUTTONS"
 			(at 3.75 10.4 0)
 			(layer "F.Fab")
-			(uuid "9cbade27-1d2d-4dbe-8b69-6f15f8d0e5c2")
+			(uuid "de74adea-3ad9-496c-99f6-d72e5ed4e4cb")
 			(effects
 				(font
 					(size 1 1)
@@ -978,7 +978,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "1a9091e8-8713-4d49-a41f-6db68f1e4143")
+			(uuid "39f8511f-1a43-40f1-b6fd-321564357bb4")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -989,7 +989,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "92c0f039-a724-43c7-a528-1c1f0bd1c9e4")
+			(uuid "67ad9f52-0266-4bb4-92b0-987a4c113dc8")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1385,7 +1385,7 @@
 	(footprint "Connector_JST:JST_XH_S4B-XH-A_1x04_P2.50mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "0b24a07f-1e0e-49c5-93d3-c737dcc14d54")
-		(at 118.99 72.965 180)
+		(at 118.93 73.33 180)
 		(descr "JST XH series connector, S4B-XH-A (http://www.jst-mfg.com/product/pdf/eng/eXH.pdf)")
 		(tags "connector JST XH horizontal")
 		(property "Reference" "J4"
@@ -2321,11 +2321,11 @@
 	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "65e464d3-e1f8-4c57-9e57-0f43f4659574")
-		(at 155.88 102.54 180)
+		(at 144.45 101.27 -90)
 		(descr "Resistor, Axial_DIN0207 series, Axial, Horizontal, pin pitch=10.16mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf")
 		(tags "Resistor Axial_DIN0207 series Axial Horizontal pin pitch 10.16mm 0.25W = 1/4W length 6.3mm diameter 2.5mm")
 		(property "Reference" "R2"
-			(at 5.08 -2.37 0)
+			(at 5.08 -2.37 90)
 			(layer "F.SilkS")
 			(uuid "badbe223-7d2a-47aa-925f-b262d4344d93")
 			(effects
@@ -2336,7 +2336,7 @@
 			)
 		)
 		(property "Value" "1 kΩ"
-			(at 5.08 2.37 0)
+			(at 5.08 2.37 90)
 			(layer "F.Fab")
 			(uuid "d0704d95-1190-4fd8-b3be-57e019c49a65")
 			(effects
@@ -2347,7 +2347,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 0)
+			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "b6361523-c631-4464-b82a-94833cfafde8")
@@ -2358,7 +2358,7 @@
 			)
 		)
 		(property "Description" "Resistor"
-			(at 0 0 0)
+			(at 0 0 90)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "bdeca416-6eb4-478d-b1bb-95f6736d755f")
@@ -2381,16 +2381,6 @@
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
-			(start 9.12 0)
-			(end 8.35 0)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "845e77c4-a0ad-4d38-ac9d-6f126a2eb0be")
-		)
-		(fp_line
 			(start 1.04 0)
 			(end 1.81 0)
 			(stroke
@@ -2399,6 +2389,16 @@
 			)
 			(layer "F.SilkS")
 			(uuid "8c25142e-9c99-4d04-8741-bd5a2143d787")
+		)
+		(fp_line
+			(start 9.12 0)
+			(end 8.35 0)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "845e77c4-a0ad-4d38-ac9d-6f126a2eb0be")
 		)
 		(fp_rect
 			(start 1.81 -1.37)
@@ -2423,16 +2423,6 @@
 			(uuid "ef4f612c-9342-4511-8f2f-195a39d2cb02")
 		)
 		(fp_line
-			(start 10.16 0)
-			(end 8.23 0)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "b471e34d-046c-4db9-aa32-97244d04d84d")
-		)
-		(fp_line
 			(start 0 0)
 			(end 1.93 0)
 			(stroke
@@ -2441,6 +2431,16 @@
 			)
 			(layer "F.Fab")
 			(uuid "da7fc683-4f9e-4cfb-9c18-1aead4585d24")
+		)
+		(fp_line
+			(start 10.16 0)
+			(end 8.23 0)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+			(uuid "b471e34d-046c-4db9-aa32-97244d04d84d")
 		)
 		(fp_rect
 			(start 1.93 -1.25)
@@ -2454,7 +2454,7 @@
 			(uuid "237332be-eea2-4a32-96dc-0339da299891")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 5.08 0 0)
+			(at 5.08 0 90)
 			(layer "F.Fab")
 			(uuid "d3227b38-8fae-4f0b-9e30-ef7901e48d54")
 			(effects
@@ -2465,7 +2465,7 @@
 			)
 		)
 		(pad "1" thru_hole circle
-			(at 0 0 180)
+			(at 0 0 270)
 			(size 1.6 1.6)
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
@@ -2475,7 +2475,7 @@
 			(uuid "5cf46a49-1433-4f67-90a3-16fd8645c97a")
 		)
 		(pad "2" thru_hole circle
-			(at 10.16 0 180)
+			(at 10.16 0 270)
 			(size 1.6 1.6)
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
@@ -2608,7 +2608,7 @@
 	(footprint "Connector_JST:JST_XH_S3B-XH-A_1x03_P2.50mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "759c3ee4-fa23-43f8-bee2-19fef1b57063")
-		(at 125.4 110.16)
+		(at 129.29 108.89)
 		(descr "JST XH series connector, S3B-XH-A (http://www.jst-mfg.com/product/pdf/eng/eXH.pdf)")
 		(tags "connector JST XH horizontal")
 		(property "Reference" "J7"
@@ -3022,7 +3022,7 @@
 	(footprint "Connector_JST:JST_XH_S4B-XH-A_1x04_P2.50mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "82050ff4-3e94-4ade-9ba4-40ad2a625f9f")
-		(at 134.23 72.965 180)
+		(at 134.23 73.33 180)
 		(descr "JST XH series connector, S4B-XH-A (http://www.jst-mfg.com/product/pdf/eng/eXH.pdf)")
 		(tags "connector JST XH horizontal")
 		(property "Reference" "J5"
@@ -3458,7 +3458,7 @@
 	(footprint "Connector_JST:JST_XH_S4B-XH-A_1x04_P2.50mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "9adbfb86-4a27-430f-99b6-9bc9d0414597")
-		(at 157.09 72.965 180)
+		(at 154.55 73.33 180)
 		(descr "JST XH series connector, S4B-XH-A (http://www.jst-mfg.com/product/pdf/eng/eXH.pdf)")
 		(tags "connector JST XH horizontal")
 		(property "Reference" "J6"
@@ -3894,7 +3894,7 @@
 	(footprint "LED_THT:LED_D5.0mm"
 		(layer "F.Cu")
 		(uuid "befc3798-75a0-4248-8f79-1d64f04d81f2")
-		(at 143.18 115.24)
+		(at 141.91 116.51)
 		(descr "LED, diameter 5.0mm, 2 pins, http://cdn-reichelt.de/documents/datenblatt/A500/LL-504BC2E-009.pdf, generated by kicad-footprint-generator")
 		(tags "LED")
 		(property "Reference" "D1"
@@ -4064,7 +4064,7 @@
 			)
 		)
 		(point
-			(at 144.45 115.24)
+			(at 143.18 116.51)
 			(size 2)
 			(layer "F.Fab")
 			(uuid "82128a70-fa7f-49b3-98b0-85e8b1103623")
@@ -4215,7 +4215,7 @@
 	(footprint "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 		(layer "F.Cu")
 		(uuid "d016291c-bf35-48a5-8a08-247478248884")
-		(at 125.4 92.38 180)
+		(at 124.13 91.11 180)
 		(descr "Resistor, Axial_DIN0207 series, Axial, Horizontal, pin pitch=10.16mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf")
 		(tags "Resistor Axial_DIN0207 series Axial Horizontal pin pitch 10.16mm 0.25W = 1/4W length 6.3mm diameter 2.5mm")
 		(property "Reference" "R1"
@@ -4502,7 +4502,7 @@
 	(footprint "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm"
 		(layer "F.Cu")
 		(uuid "ef629e04-ac0c-4d60-8c88-325dd0362f05")
-		(at 150.84 89.84)
+		(at 152.11 98.73)
 		(descr "CP, Radial series, Radial, pin pitch=2.50mm, diameter=6.3mm, height=7mm, Electrolytic Capacitor")
 		(tags "CP Radial series Radial pin pitch 2.50mm diameter 6.3mm height 7mm Electrolytic Capacitor")
 		(property "Reference" "C1"
