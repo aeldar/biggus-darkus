@@ -5262,7 +5262,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "Analog"
+		(property "Value" "Nano_Analog"
 			(at 2.794 -19.05 180)
 			(layer "B.Fab")
 			(uuid "5c2dd5b9-4f59-44dc-a1f5-da3ebcd394c4")
@@ -5482,7 +5482,7 @@
 			(remove_unused_layers no)
 			(net "/D13{slash}SCK")
 			(pinfunction "Pin_1_1")
-			(pintype "passive")
+			(pintype "passive+no_connect")
 			(uuid "718fc242-0226-4e8d-974c-ac588e1f524d")
 		)
 		(pad "2" thru_hole oval
@@ -5504,7 +5504,7 @@
 			(remove_unused_layers no)
 			(net "/AREF")
 			(pinfunction "Pin_3_3")
-			(pintype "passive")
+			(pintype "passive+no_connect")
 			(uuid "d6caa3bf-5a63-4512-9cf0-1510dad3a8e0")
 		)
 		(pad "4" thru_hole oval
@@ -5548,7 +5548,7 @@
 			(remove_unused_layers no)
 			(net "/A3")
 			(pinfunction "Pin_7_7")
-			(pintype "passive")
+			(pintype "passive+no_connect")
 			(uuid "c47efea1-cea1-4e0f-8577-40d50d5eff5d")
 		)
 		(pad "8" thru_hole oval
@@ -5581,7 +5581,7 @@
 			(remove_unused_layers no)
 			(net "/A6")
 			(pinfunction "Pin_10_10")
-			(pintype "passive")
+			(pintype "passive+no_connect")
 			(uuid "eea91a48-dd70-4af1-9f7e-4ed0176b208c")
 		)
 		(pad "11" thru_hole oval
@@ -5592,7 +5592,7 @@
 			(remove_unused_layers no)
 			(net "/A7")
 			(pinfunction "Pin_11_11")
-			(pintype "passive")
+			(pintype "passive+no_connect")
 			(uuid "829cb78a-67e1-429d-b7fc-216aaae9b610")
 		)
 		(pad "12" thru_hole oval
@@ -5671,7 +5671,7 @@
 				(justify mirror)
 			)
 		)
-		(property "Value" "Digital"
+		(property "Value" "Nano_Digital"
 			(at -2.794 -19.05 180)
 			(layer "B.Fab")
 			(uuid "b0e7619f-e317-442e-9122-25f54d8e6eb6")
@@ -5891,7 +5891,7 @@
 			(remove_unused_layers no)
 			(net "/D12{slash}MISO")
 			(pinfunction "Pin_1_1")
-			(pintype "passive")
+			(pintype "passive+no_connect")
 			(uuid "fabf119f-7547-4364-a2c0-9d8e4d40116b")
 		)
 		(pad "2" thru_hole oval
@@ -5902,7 +5902,7 @@
 			(remove_unused_layers no)
 			(net "/*D11{slash}MOSI")
 			(pinfunction "Pin_2_2")
-			(pintype "passive")
+			(pintype "passive+no_connect")
 			(uuid "eb9b79a8-7097-4e7e-a79d-094c556f6760")
 		)
 		(pad "3" thru_hole oval
@@ -5913,7 +5913,7 @@
 			(remove_unused_layers no)
 			(net "/*D10{slash}SS")
 			(pinfunction "Pin_3_3")
-			(pintype "passive")
+			(pintype "passive+no_connect")
 			(uuid "626d38ef-0964-4f55-9bd7-27fd83aaa853")
 		)
 		(pad "4" thru_hole oval
@@ -5924,7 +5924,7 @@
 			(remove_unused_layers no)
 			(net "/*D9")
 			(pinfunction "Pin_4_4")
-			(pintype "passive")
+			(pintype "passive+no_connect")
 			(uuid "c0ca278b-ddad-46c3-a317-3869080eaf3a")
 		)
 		(pad "5" thru_hole oval
@@ -6001,7 +6001,7 @@
 			(remove_unused_layers no)
 			(net "/D2")
 			(pinfunction "Pin_11_11")
-			(pintype "passive")
+			(pintype "passive+no_connect")
 			(uuid "dfde85d8-3bfa-4d54-a2aa-cf0c01a1e63e")
 		)
 		(pad "12" thru_hole oval
@@ -6034,7 +6034,7 @@
 			(remove_unused_layers no)
 			(net "/D0{slash}RX")
 			(pinfunction "Pin_14_14")
-			(pintype "passive")
+			(pintype "passive+no_connect")
 			(uuid "2b3cd93c-26ad-49ff-b1e1-eda8a3c43936")
 		)
 		(pad "15" thru_hole oval
@@ -6045,7 +6045,7 @@
 			(remove_unused_layers no)
 			(net "/D1{slash}TX")
 			(pinfunction "Pin_15_15")
-			(pintype "passive")
+			(pintype "passive+no_connect")
 			(uuid "fa923ddb-a377-409a-a3ee-2863b4ebd675")
 		)
 		(embedded_fonts no)
