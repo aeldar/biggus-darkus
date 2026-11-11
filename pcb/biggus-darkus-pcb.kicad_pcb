@@ -5135,13 +5135,13 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical"
+	(footprint "Connector_PinSocket_2.54mm:PinSocket_1x15_P2.54mm_Vertical"
 		(locked yes)
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-0000551fc1fe")
 		(at 103.81 98.73 -90)
-		(descr "Through hole straight pin header, 1x15, 2.54mm pitch, single row")
-		(tags "Through hole pin header THT 1x15 2.54mm single row")
+		(descr "Through hole straight socket strip, 1x15, 2.54mm pitch, single row (from Kicad 4.0.7), script generated")
+		(tags "Through hole socket strip THT 1x15 2.54mm single row")
 		(property "Reference" "J1"
 			(at -2.54 0 180)
 			(layer "B.SilkS")
@@ -5202,7 +5202,7 @@
 				(pins "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" "11" "12" "13" "14" "15")
 			)
 		)
-		(attr through_hole dnp)
+		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
 			(start -1.33 1.33)
@@ -5532,7 +5532,7 @@
 			(uuid "92dfbff7-1995-4ad5-8ba3-17d1b6ffa502")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x15_P2.54mm_Vertical.stpZ"
+		(model "${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x15_P2.54mm_Vertical.stpZ"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -5544,13 +5544,13 @@
 			)
 		)
 	)
-	(footprint "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical"
+	(footprint "Connector_PinSocket_2.54mm:PinSocket_1x15_P2.54mm_Vertical"
 		(locked yes)
 		(layer "B.Cu")
 		(uuid "00000000-0000-0000-0000-0000551fc21e")
 		(at 103.81 83.49 -90)
-		(descr "Through hole straight pin header, 1x15, 2.54mm pitch, single row")
-		(tags "Through hole pin header THT 1x15 2.54mm single row")
+		(descr "Through hole straight socket strip, 1x15, 2.54mm pitch, single row (from Kicad 4.0.7), script generated")
+		(tags "Through hole socket strip THT 1x15 2.54mm single row")
 		(property "Reference" "J2"
 			(at 2.54 0 180)
 			(layer "B.SilkS")
@@ -5611,7 +5611,7 @@
 				(pins "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" "11" "12" "13" "14" "15")
 			)
 		)
-		(attr through_hole dnp)
+		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
 			(start -1.33 1.33)
@@ -5941,7 +5941,7 @@
 			(uuid "fa923ddb-a377-409a-a3ee-2863b4ebd675")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x15_P2.54mm_Vertical.stpZ"
+		(model "${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x15_P2.54mm_Vertical.stpZ"
 			(offset
 				(xyz 0 0 0)
 			)
