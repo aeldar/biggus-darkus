@@ -30,7 +30,7 @@ The board has 18 rows (confirmed), so the borders above are exact.
 
 | Part | Value | Footprint | Pin: hole (net) |
 |---|---|---|---|
-| C1 | 470 µF | `CP_Radial_D6.3mm_P2.50mm` | 1: R16 (+5V); 2: R17 (GND) |
+| C1 | 470 µF | `CP_Radial_D6.3mm_P2.50mm` | 1: R15 (+5V); 2: R16 (GND) |
 | D1 | LED | `LED_D5.0mm` | 1: X12 (GND); 2: W12 (Net-(D1-A)) |
 | J3 | Barrel_Jack_Switch | `BarrelJack_Horizontal` | 1: V15 (+5V); 2: V17 (GND); 3: X16 (*D3) |
 | J4 | TM1637_A | `JST_XH_S4B-XH-A_1x04_P2.50mm_Horizontal` | 1: E2 (D7); 2: D2 (D8); 3: C2 (+5V); 4: B2 (GND) |
@@ -106,7 +106,7 @@ Rails are back wires (bare). Every hole they touch is part of the net. Thick wir
 | back, bare | O18 > R18 | 7.6 |
 | back, bare | O18 > O17 [J7.3] | 2.5 |
 | back, bare | O2 [J6.4] > O1 | 2.4 |
-| back, bare | R18 > R17 [C1.2] | 2.5 |
+| back, bare | R18 > R16 [C1.2] | 5.1 |
 | back, bare | V17 [J3.2] > U18 > R18 | 10.8 |
 | front, insulated | M5 (via) > M3 (via) | 5.1 |
 
@@ -118,17 +118,16 @@ Rails are back wires (bare). Every hole they touch is part of the net. Thick wir
 | back, bare | I2 [J5.3] > I4 | 5.0 |
 | back, bare | I4 > C4 | 15.2 |
 | back, bare | M15 > M12 [J1.12] | 7.6 |
+| back, bare | M15 > R15 [C1.1] > V15 [J3.1] > V6 | 45.6 |
 | back, bare | M15 > M17 [J7.1] | 5.0 |
-| back, bare | M15 > R15 > R16 [C1.1] > V16 | 25.4 |
 | back, bare | P4 > V4 > V6 | 20.3 |
 | back, bare | P4 > P2 [J6.3] | 5.0 |
 | back, bare | P4 > I4 | 17.8 |
-| back, bare | V6 > V15 [J3.1] > V16 | 25.4 |
 | back, bare | V6 > W6 [R2.1] | 2.5 |
 
 ## 6. Wire needed (without slack)
 
-- Back side, bare wire: about **582 mm** (rails: thicker wire for the strip path).
+- Back side, bare wire: about **579 mm** (rails: thicker wire for the strip path).
 - Front side, insulated wire: about **74 mm** in total.
 - Add a few millimetres of slack to each piece.
 
