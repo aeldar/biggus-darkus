@@ -38,7 +38,7 @@ The board has 18 rows (confirmed), so the borders above are exact.
 | J6 | LCD1602_I2C | `JST_XH_S4B-XH-A_1x04_P2.50mm_Horizontal` | 1: R2 (A5/SCL); 2: Q2 (A4/SDA); 3: P2 (+5V); 4: O2 (GND) |
 | J7 | WS2812B_STRIP | `JST_XH_S3B-XH-A_1x03_P2.50mm_Horizontal` | 1: M17 (+5V); 2: N17 (Net-(J7-Pin_2)); 3: O17 (GND) |
 | J8 | BUTTONS | `JST_XH_S4B-XH-A_1x04_P2.50mm_Horizontal` | 1: B17 (A0); 2: C17 (A1); 3: D17 (A2); 4: E17 (GND) |
-| R1 | 330 | `R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal` | 1: N14 (Net-(J7-Pin_2)); 2: J14 (A3) |
+| R1 | 330 | `R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal` | 1: M14 (Net-(J7-Pin_2)); 2: I14 (A3) |
 | R2 | 1 kΩ | `R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal` | 1: W6 (+5V); 2: W10 (Net-(D1-A)) |
 | J1 | Nano_Analog | `PinSocket_1x15_P2.54mm_Vertical` | row 12, B12 to P12, see the Nano table |
 | J2 | Nano_Digital | `PinSocket_1x15_P2.54mm_Vertical` | row 6, B6 to P6, see the Nano table |
@@ -77,13 +77,13 @@ Each signal is a chain of back wires (bare) and front wires (insulated). Read ea
 | A0 | **back**: E12 [J1.4] > E14 > B14 > B17 [J8.1] | 20.3 |
 | A1 | **back**: C17 [J8.2] > C16 ; **back**: C16 > C15 > F15 > F12 [J1.5] | 20.3 |
 | A2 | **back**: D17 [J8.3] > D16 ; **back**: D16 > G16 > G12 [J1.6] | 20.2 |
-| A3 | **back**: J14 [R1.2] > H14 > H12 [J1.7] | 10.2 |
+| A3 | **back**: I14 [R1.2] > H14 > H12 [J1.7] | 7.6 |
 | A4/SDA | **back**: I12 [J1.8] > I10 > R10 > R5 (via) ; **front**: R5 (via) > R3 (via) ; **back**: R3 (via) > Q3 ; **back**: Q3 > Q2 [J6.2] | 50.8 |
 | A5/SCL | **back**: R2 [J6.1] > S2 > S3 (via) ; **front**: S3 (via) > S5 (via) ; **back**: S5 (via) > S11 > J11 > J12 [J1.9] | 50.8 |
 | D7 | **back**: E2 [J4.1] > E3 (via) ; **front**: E3 (via) > E4 > G4 > G5 (via) ; **back**: G5 (via) > G6 [J2.6] | 15.2 |
 | D8 | **back**: D2 [J4.2] > D3 (via) ; **front**: D3 (via) > D5 > F5 (via) ; **back**: F5 (via) > F6 [J2.5] | 15.2 |
 | Net-(D1-A) | **back**: W10 [R2.2] > W12 [D1.2] | 5.1 |
-| Net-(J7-Pin_2) | **back**: N14 [R1.1] > O14 (via) ; **front**: O14 (via) > O16 (via) ; **back**: O16 (via) > N16 > N17 [J7.2] | 12.7 |
+| Net-(J7-Pin_2) | **back**: M14 [R1.1] > N14 (via) ; **front**: N14 (via) > N16 (via) ; **back**: N16 (via) > N17 [J7.2] | 10.2 |
 
 ## 5. Power rails and their jumpers
 
@@ -117,17 +117,18 @@ Rails are back wires (bare). Every hole they touch is part of the net. Thick wir
 | back, bare | C4 > C2 [J4.3] | 5.0 |
 | back, bare | I2 [J5.3] > I4 | 5.0 |
 | back, bare | I4 > C4 | 15.2 |
-| back, bare | M15 > M12 [J1.12] | 7.6 |
-| back, bare | M15 > R15 [C1.1] > V15 [J3.1] > V6 | 45.6 |
+| back, bare | M15 > P15 | 7.5 |
 | back, bare | M15 > M17 [J7.1] | 5.0 |
+| back, bare | P15 > P13 > M13 > M12 [J1.12] | 15.2 |
 | back, bare | P4 > V4 > V6 | 20.3 |
 | back, bare | P4 > P2 [J6.3] | 5.0 |
 | back, bare | P4 > I4 | 17.8 |
+| back, bare | V6 > V15 [J3.1] > R15 [C1.1] > P15 | 38.1 |
 | back, bare | V6 > W6 [R2.1] | 2.5 |
 
 ## 6. Wire needed (without slack)
 
-- Back side, bare wire: about **579 mm** (rails: thicker wire for the strip path).
+- Back side, bare wire: about **582 mm** (rails: thicker wire for the strip path).
 - Front side, insulated wire: about **74 mm** in total.
 - Add a few millimetres of slack to each piece.
 
