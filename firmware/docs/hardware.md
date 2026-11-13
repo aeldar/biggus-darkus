@@ -13,7 +13,7 @@ firmware never names those pins because `Wire` selects them.
 
 | Signal | MCU pin | Connects to | Notes |
 |---|---|---|---|
-| LED data | `4` (`PIN_LED_DATA`) | WS2811 strip data in | Single-wire, no clock |
+| LED data | `A3` (`PIN_LED_DATA`) | WS2811 strip data in | Single-wire, no clock |
 | Mode button | `A0` (`PIN_BTN`) | Button to ground | `INPUT_PULLUP`, 50 ms debounce; press cycles Demo → Active → Off |
 | 4-digit display CLK | `5` (`PIN_CLK_4DIG`) | 4-digit TM1637 | |
 | 4-digit display DIO | `6` (`PIN_DIO_4DIG`) | 4-digit TM1637 | |

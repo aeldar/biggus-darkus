@@ -5,7 +5,7 @@
 #pragma once
 
 // LED strip (WS2811 data line)
-#define PIN_LED_DATA   4
+#define PIN_LED_DATA   A3
 
 // Mode button, wired to ground; INPUT_PULLUP keeps it HIGH until pressed
 #define PIN_BTN        A0
