@@ -134,12 +134,17 @@ Rails are back wires (bare). Every hole they touch is part of the net. Thick wir
 
 ## 7. Build order
 
-1. Solder the Nano sockets (J2 on row 6 and J1 on row 12, columns B to P). Plug the Nano in while you solder, so the rows line up.
-2. Solder the jack, the JST connectors, R1, R2, D1 and C1.
-3. Do the back side: the GND rails first, then the +5V rails, then the short back stubs of each signal.
-4. Do the front side jumpers, one signal at a time, and check each with a multimeter.
-5. Before you plug in the Nano: check continuity of every net, and that there is **no short between +5V and GND**.
-6. Power from the jack alone, check 5 V and the power LED, then plug in the Nano and test each module.
+1. Mark the column letters (A to X) and row numbers (1 to 18) on the board edge. Count holes from A1, not from the edge.
+2. Solder the Nano sockets (J2 on row 6 and J1 on row 12, columns B to P). Solder one pin per socket first, check both sit flat, then solder the rest. Plug the Nano in while you do this, so the rows stay 6 holes apart. Take the Nano out afterwards.
+3. Solder the low parts: R1, R2, D1.
+4. Solder the JST connectors (J4 to J8). Tack one pin, check the connector is flat and straight, then solder the rest. Cables pull on them, so use enough solder.
+5. Solder C1 and the barrel jack J3 last. They are tall and make the board rock when flipped. Check the real pin spacing of the jack first, and use plenty of solder, because it takes the most force.
+6. Back side, bare wire: the GND rails first (start with the long row 18 wire and the column A wire), then the row 1 wire and the short stubs.
+7. Back side: the +5V rails (thick wire from the jack V15 to the strip connector M17). Then **stop and check there is no short between +5V and GND**.
+8. Back side: the short stubs of each signal, one signal at a time. Check each wire touches only the holes of its own net.
+9. Front side, insulated jumpers: last, because they cross other wires. One signal at a time, check each with a multimeter.
+10. Before you plug in the Nano: check continuity of every net, and that the unused Nano pins (rows 6 and 12) have no solder bridges.
+11. Power from the jack alone, check 5 V and the power LED, then plug in the Nano and test each module.
 
 ## 8. Checks before the first power-up
 
