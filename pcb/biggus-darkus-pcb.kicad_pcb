@@ -508,9 +508,9 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "/~{RESET}")
+			(net "unconnected-(J1-Pin_13-Pad13)")
 			(pinfunction "Pin_13_13")
-			(pintype "passive")
+			(pintype "passive+no_connect")
 			(uuid "1d1d276d-d62b-4147-84a3-b4964a90180b")
 		)
 		(pad "14" thru_hole oval
@@ -926,9 +926,9 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net "/~{RESET}")
+			(net "unconnected-(J2-Pin_13-Pad13)")
 			(pinfunction "Pin_13_13")
-			(pintype "passive")
+			(pintype "passive+no_connect")
 			(uuid "bffdb388-5371-4cce-a10e-7926fb47c54a")
 		)
 		(pad "14" thru_hole oval
@@ -3482,6 +3482,7 @@
 		)
 	)
 	(footprint "Connector_JST:JST_XH_S4B-XH-A_1x04_P2.50mm_Horizontal"
+		(locked yes)
 		(layer "F.Cu")
 		(uuid "9adbfb86-4a27-430f-99b6-9bc9d0414597")
 		(at 143.18 72.54 180)

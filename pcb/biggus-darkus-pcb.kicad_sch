@@ -2361,6 +2361,26 @@
 		)
 		(uuid "80721094-bdc5-435d-a76f-4339f15847fb")
 	)
+	(text "RESET"
+		(exclude_from_sim no)
+		(at 113.03 115.824 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "a6640613-c6ad-487c-8108-fc39621059cb")
+	)
+	(text "RESET"
+		(exclude_from_sim no)
+		(at 165.862 115.824 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "c8b7bdb6-d142-4656-bc48-075788ad3dde")
+	)
 	(junction
 		(at 125.73 83.82)
 		(diameter 0)
@@ -3428,26 +3448,6 @@
 			(justify left bottom)
 		)
 		(uuid "a749243c-4d08-4e8e-a789-9f617f366d8f")
-	)
-	(label "~{RESET}"
-		(at 168.91 116.84 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "a8167c8c-76f9-42ff-885a-ff751268241f")
-	)
-	(label "~{RESET}"
-		(at 110.49 116.84 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "a8f529f9-3981-412d-9906-5e875e982acd")
 	)
 	(label "A6"
 		(at 110.49 109.22 0)
