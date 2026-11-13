@@ -2351,6 +2351,16 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "GND"
+		(exclude_from_sim no)
+		(at 125.984 128.524 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "80721094-bdc5-435d-a76f-4339f15847fb")
+	)
 	(junction
 		(at 125.73 83.82)
 		(diameter 0)
@@ -2420,8 +2430,16 @@
 		(uuid "1d14708e-335f-46bb-980b-591def62e03c")
 	)
 	(no_connect
+		(at 168.91 116.84)
+		(uuid "1dd04cbc-7b4e-4d9e-81df-ed146234aff9")
+	)
+	(no_connect
 		(at 168.91 119.38)
 		(uuid "58dd562d-d0a0-4104-9c62-462933ab2bf4")
+	)
+	(no_connect
+		(at 125.73 125.73)
+		(uuid "72cd37b3-61eb-47bb-92a4-b5aa203b1ff7")
 	)
 	(no_connect
 		(at 168.91 106.68)
@@ -2434,6 +2452,10 @@
 	(no_connect
 		(at 110.49 111.76)
 		(uuid "c8744d0e-8ef9-48f2-aa98-4f0193f8ea45")
+	)
+	(no_connect
+		(at 110.49 116.84)
+		(uuid "cdb25288-085b-4b97-a84c-f061107c7144")
 	)
 	(no_connect
 		(at 168.91 93.98)
@@ -2889,7 +2911,7 @@
 	)
 	(wire
 		(pts
-			(xy 125.73 119.38) (xy 125.73 124.46)
+			(xy 125.73 119.38) (xy 125.73 125.73)
 		)
 		(stroke
 			(width 0)
@@ -5958,83 +5980,6 @@
 			(project "biggus-darkus-pcb"
 				(path "/0d35483a-0b12-46cc-b9f2-896fd6831779"
 					(reference "#PWR010")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 125.73 124.46 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "db3ca061-004c-45dd-981d-90a093b53fa7")
-		(property "Reference" "#PWR0104"
-			(at 125.73 130.81 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 125.73 128.27 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 125.73 124.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 125.73 124.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 125.73 124.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "173c7edd-70b9-4b52-9f4e-63854cbf6c47")
-		)
-		(instances
-			(project "biggus-darkus-pcb"
-				(path "/0d35483a-0b12-46cc-b9f2-896fd6831779"
-					(reference "#PWR0104")
 					(unit 1)
 				)
 			)
