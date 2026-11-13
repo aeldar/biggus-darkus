@@ -2424,7 +2424,7 @@
 		(uuid "58dd562d-d0a0-4104-9c62-462933ab2bf4")
 	)
 	(no_connect
-		(at 110.49 101.6)
+		(at 168.91 106.68)
 		(uuid "7cb517aa-0226-485f-9c61-e7183797da1f")
 	)
 	(no_connect
@@ -3297,7 +3297,7 @@
 		)
 		(uuid "56d941f2-8214-44c6-8ad2-5e60b7da1e5e")
 	)
-	(label "D4"
+	(label "A3"
 		(at 195.58 129.54 0)
 		(effects
 			(font
