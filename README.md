@@ -8,7 +8,7 @@ An Elite Dangerous companion tool: a custom hardware device that shows live game
 |---|---|---|
 | [`firmware`](firmware/) | Firmware for the custom device (Arduino Nano, LED strip, TM1637 digit displays, 16×2 LCD, mode button) | Working |
 | [`app`](app/) | Desktop app (Rust, Tauri, React) that reads Elite Dangerous journals and state, and sends them to the device over serial. Its GUI sets the serial port, the journal location and the rules for how the device reacts to game events and state. Also has a headless CLI. | Working; tested with the real device and game, bugs still being collected |
-| [`pcb`](pcb/) | KiCad design for the device board | In progress |
+| [`pcb`](pcb/) | KiCad design for the device board, built on a perfboard. Build and wiring guide: [`pcb/wiring.md`](pcb/wiring.md) | In progress |
 
 ## How it fits together
 
