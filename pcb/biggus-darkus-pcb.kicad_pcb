@@ -201,12 +201,6 @@
 		(path "/00000000-0000-0000-0000-000056d719df")
 		(sheetname "/")
 		(sheetfile "biggus-darkus-pcb.kicad_sch")
-		(units
-			(unit
-				(name "A")
-				(pins "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" "11" "12" "13" "14" "15")
-			)
-		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -381,7 +375,7 @@
 			(pintype "passive+no_connect")
 			(uuid "718fc242-0226-4e8d-974c-ac588e1f524d")
 		)
-		(pad "2" thru_hole oval
+		(pad "2" thru_hole circle
 			(at 0 2.54 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -392,7 +386,7 @@
 			(pintype "passive")
 			(uuid "be713b41-0499-4f83-99a4-3ae72a5de3bb")
 		)
-		(pad "3" thru_hole oval
+		(pad "3" thru_hole circle
 			(at 0 5.08 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -403,7 +397,7 @@
 			(pintype "passive+no_connect")
 			(uuid "d6caa3bf-5a63-4512-9cf0-1510dad3a8e0")
 		)
-		(pad "4" thru_hole oval
+		(pad "4" thru_hole circle
 			(at 0 7.62 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -414,7 +408,7 @@
 			(pintype "passive")
 			(uuid "7c786a37-f7a2-4f26-a7e1-6bea301bcfff")
 		)
-		(pad "5" thru_hole oval
+		(pad "5" thru_hole circle
 			(at 0 10.16 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -425,7 +419,7 @@
 			(pintype "passive")
 			(uuid "fc2a05b5-0476-4d9a-b025-e0c27a8998be")
 		)
-		(pad "6" thru_hole oval
+		(pad "6" thru_hole circle
 			(at 0 12.7 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -436,7 +430,7 @@
 			(pintype "passive")
 			(uuid "d3fc4689-8b0d-4de0-99eb-b4f0b6092b9e")
 		)
-		(pad "7" thru_hole oval
+		(pad "7" thru_hole circle
 			(at 0 15.24 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -447,7 +441,7 @@
 			(pintype "passive")
 			(uuid "c47efea1-cea1-4e0f-8577-40d50d5eff5d")
 		)
-		(pad "8" thru_hole oval
+		(pad "8" thru_hole circle
 			(at 0 17.78 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -458,7 +452,7 @@
 			(pintype "passive")
 			(uuid "82eb0d7e-6779-4092-8c2b-eb98c7be49cf")
 		)
-		(pad "9" thru_hole oval
+		(pad "9" thru_hole circle
 			(at 0 20.32 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -469,7 +463,7 @@
 			(pintype "passive")
 			(uuid "a4c4f08d-dbd3-4d5b-91a0-c7ddcac749a9")
 		)
-		(pad "10" thru_hole oval
+		(pad "10" thru_hole circle
 			(at 0 22.86 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -480,7 +474,7 @@
 			(pintype "passive+no_connect")
 			(uuid "eea91a48-dd70-4af1-9f7e-4ed0176b208c")
 		)
-		(pad "11" thru_hole oval
+		(pad "11" thru_hole circle
 			(at 0 25.4 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -491,7 +485,7 @@
 			(pintype "passive+no_connect")
 			(uuid "829cb78a-67e1-429d-b7fc-216aaae9b610")
 		)
-		(pad "12" thru_hole oval
+		(pad "12" thru_hole circle
 			(at 0 27.94 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -502,7 +496,7 @@
 			(pintype "passive")
 			(uuid "9843902b-4b7b-4f43-b60c-ab2e23171272")
 		)
-		(pad "13" thru_hole oval
+		(pad "13" thru_hole circle
 			(at 0 30.48 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -513,7 +507,7 @@
 			(pintype "passive+no_connect")
 			(uuid "1d1d276d-d62b-4147-84a3-b4964a90180b")
 		)
-		(pad "14" thru_hole oval
+		(pad "14" thru_hole circle
 			(at 0 33.02 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -524,7 +518,7 @@
 			(pintype "passive+no_connect")
 			(uuid "d0465e40-0aa4-4861-9c5a-70292391ff96")
 		)
-		(pad "15" thru_hole oval
+		(pad "15" thru_hole circle
 			(at 0 35.56 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -619,12 +613,6 @@
 		(path "/00000000-0000-0000-0000-000056d71a21")
 		(sheetname "/")
 		(sheetfile "biggus-darkus-pcb.kicad_sch")
-		(units
-			(unit
-				(name "A")
-				(pins "1" "2" "3" "4" "5" "6" "7" "8" "9" "10" "11" "12" "13" "14" "15")
-			)
-		)
 		(attr through_hole)
 		(duplicate_pad_numbers_are_jumpers no)
 		(fp_line
@@ -799,7 +787,7 @@
 			(pintype "passive+no_connect")
 			(uuid "fabf119f-7547-4364-a2c0-9d8e4d40116b")
 		)
-		(pad "2" thru_hole oval
+		(pad "2" thru_hole circle
 			(at 0 2.54 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -810,7 +798,7 @@
 			(pintype "passive+no_connect")
 			(uuid "eb9b79a8-7097-4e7e-a79d-094c556f6760")
 		)
-		(pad "3" thru_hole oval
+		(pad "3" thru_hole circle
 			(at 0 5.08 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -821,7 +809,7 @@
 			(pintype "passive+no_connect")
 			(uuid "626d38ef-0964-4f55-9bd7-27fd83aaa853")
 		)
-		(pad "4" thru_hole oval
+		(pad "4" thru_hole circle
 			(at 0 7.62 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -832,7 +820,7 @@
 			(pintype "passive+no_connect")
 			(uuid "c0ca278b-ddad-46c3-a317-3869080eaf3a")
 		)
-		(pad "5" thru_hole oval
+		(pad "5" thru_hole circle
 			(at 0 10.16 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -843,7 +831,7 @@
 			(pintype "passive")
 			(uuid "26433f8f-5805-4e07-b754-30ff2dda3bac")
 		)
-		(pad "6" thru_hole oval
+		(pad "6" thru_hole circle
 			(at 0 12.7 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -854,7 +842,7 @@
 			(pintype "passive")
 			(uuid "b8bb3a95-2871-4709-8453-ae8a2179a390")
 		)
-		(pad "7" thru_hole oval
+		(pad "7" thru_hole circle
 			(at 0 15.24 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -865,7 +853,7 @@
 			(pintype "passive")
 			(uuid "10e92882-889d-4837-91c2-ca85b41b68f3")
 		)
-		(pad "8" thru_hole oval
+		(pad "8" thru_hole circle
 			(at 0 17.78 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -876,7 +864,7 @@
 			(pintype "passive")
 			(uuid "e5358e8f-f5ea-46d3-94ea-dff44ccca694")
 		)
-		(pad "9" thru_hole oval
+		(pad "9" thru_hole circle
 			(at 0 20.32 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -887,7 +875,7 @@
 			(pintype "passive+no_connect")
 			(uuid "c4f1c6ad-c439-46ca-a2d1-646238c7fc60")
 		)
-		(pad "10" thru_hole oval
+		(pad "10" thru_hole circle
 			(at 0 22.86 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -898,7 +886,7 @@
 			(pintype "passive")
 			(uuid "086fb9ee-5407-40ad-ba0c-db430e5328ea")
 		)
-		(pad "11" thru_hole oval
+		(pad "11" thru_hole circle
 			(at 0 25.4 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -909,7 +897,7 @@
 			(pintype "passive+no_connect")
 			(uuid "dfde85d8-3bfa-4d54-a2aa-cf0c01a1e63e")
 		)
-		(pad "12" thru_hole oval
+		(pad "12" thru_hole circle
 			(at 0 27.94 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -920,7 +908,7 @@
 			(pintype "passive")
 			(uuid "e42de06a-a23e-4b19-a7dd-983bb2e05872")
 		)
-		(pad "13" thru_hole oval
+		(pad "13" thru_hole circle
 			(at 0 30.48 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -931,7 +919,7 @@
 			(pintype "passive+no_connect")
 			(uuid "bffdb388-5371-4cce-a10e-7926fb47c54a")
 		)
-		(pad "14" thru_hole oval
+		(pad "14" thru_hole circle
 			(at 0 33.02 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -942,7 +930,7 @@
 			(pintype "passive+no_connect")
 			(uuid "2b3cd93c-26ad-49ff-b1e1-eda8a3c43936")
 		)
-		(pad "15" thru_hole oval
+		(pad "15" thru_hole circle
 			(at 0 35.56 90)
 			(size 1.7 1.7)
 			(drill 1)
@@ -2345,7 +2333,7 @@
 		(locked yes)
 		(layer "F.Cu")
 		(uuid "65e464d3-e1f8-4c57-9e57-0f43f4659574")
-		(at 155.88 82.7 -90)
+		(at 155.88 80.16 -90)
 		(descr "Resistor, Axial_DIN0207 series, Axial, Horizontal, pin pitch=10.16mm, 0.25W = 1/4W, length*diameter=6.3*2.5mm^2, http://cdn-reichelt.de/documents/datenblatt/B400/1_4W%23YAG.pdf")
 		(tags "Resistor Axial_DIN0207 series Axial Horizontal pin pitch 10.16mm 0.25W = 1/4W length 6.3mm diameter 2.5mm")
 		(property "Reference" "R2"
@@ -3922,7 +3910,7 @@
 		(locked yes)
 		(layer "F.Cu")
 		(uuid "befc3798-75a0-4248-8f79-1d64f04d81f2")
-		(at 158.42 97.94 180)
+		(at 158.42 95.4 180)
 		(descr "LED, diameter 5.0mm, 2 pins, http://cdn-reichelt.de/documents/datenblatt/A500/LL-504BC2E-009.pdf, generated by kicad-footprint-generator")
 		(tags "LED")
 		(property "Reference" "D1"
@@ -4092,7 +4080,7 @@
 			)
 		)
 		(point
-			(at 157.15 97.94)
+			(at 157.15 95.4)
 			(size 2)
 			(layer "F.Fab")
 			(uuid "82128a70-fa7f-49b3-98b0-85e8b1103623")
@@ -6376,14 +6364,6 @@
 		(uuid "2188f565-3146-4f06-92c2-3ab6724757e9")
 	)
 	(segment
-		(start 153.34 82.7)
-		(end 153.34 105.56)
-		(width 1.2)
-		(layer "B.Cu")
-		(net "+5V")
-		(uuid "3930c2f5-ee61-48e0-b4b4-7d00c9a89a47")
-	)
-	(segment
 		(start 120.4 72.54)
 		(end 120.4 77.54)
 		(width 1.2)
@@ -6398,14 +6378,6 @@
 		(layer "B.Cu")
 		(net "+5V")
 		(uuid "3d4d6d5f-2d3b-430c-b63f-366dbb608afc")
-	)
-	(segment
-		(start 130.48 105.56)
-		(end 130.52 105.6)
-		(width 1.2)
-		(layer "B.Cu")
-		(net "+5V")
-		(uuid "45588e05-2f41-4be5-80e2-9552608c7e98")
 	)
 	(segment
 		(start 138.1 100.48)
@@ -6456,6 +6428,14 @@
 		(uuid "74d90559-0fc9-4ee3-964a-44d2baf47250")
 	)
 	(segment
+		(start 153.34 77.62)
+		(end 153.34 105.56)
+		(width 1.2)
+		(layer "B.Cu")
+		(net "+5V")
+		(uuid "7ad56143-23be-4c48-96dd-417b294120f0")
+	)
+	(segment
 		(start 143.18 105.56)
 		(end 138.1 105.56)
 		(width 1.2)
@@ -6470,14 +6450,6 @@
 		(layer "B.Cu")
 		(net "+5V")
 		(uuid "83a03052-d47b-424c-9c08-58b6e007ab4e")
-	)
-	(segment
-		(start 153.34 77.62)
-		(end 153.34 82.7)
-		(width 1.2)
-		(layer "B.Cu")
-		(net "+5V")
-		(uuid "b20ec748-b053-46c6-8f9d-ce5b06b597e1")
 	)
 	(segment
 		(start 138.18 72.54)
@@ -6512,8 +6484,8 @@
 		(uuid "e2126509-9a13-482a-828d-efd531831cd1")
 	)
 	(segment
-		(start 153.34 82.7)
-		(end 155.88 82.7)
+		(start 153.34 80.16)
+		(end 155.88 80.16)
 		(width 1.2)
 		(layer "B.Cu")
 		(net "+5V")
@@ -6749,7 +6721,7 @@
 		(width 1.2)
 		(layer "B.Cu")
 		(net "/*D5")
-		(uuid "0bfa30d9-ad8c-4587-aef5-3494bacac37a")
+		(uuid "7b5eadfd-26a4-4814-8385-f7685fe9d2cf")
 	)
 	(segment
 		(start 125.4 72.54)
@@ -6760,14 +6732,6 @@
 		(uuid "bd07ce1b-fe16-4fb0-9d24-e192e08f84ec")
 	)
 	(segment
-		(start 150.8 103.02)
-		(end 150.81 103.01)
-		(width 0.5)
-		(layer "F.Cu")
-		(net "/*D3")
-		(uuid "3c34d521-2a00-4b02-a312-c0630b87d3d1")
-	)
-	(segment
 		(start 148.26 85.24)
 		(end 140.64 85.24)
 		(width 0.5)
@@ -6776,36 +6740,20 @@
 		(uuid "7d0c714f-b06b-412f-87f5-eb2825f25fee")
 	)
 	(segment
-		(start 150.81 103.01)
-		(end 155.87 103.01)
+		(start 150.8 100.48)
+		(end 155.88 100.48)
 		(width 0.5)
 		(layer "F.Cu")
 		(net "/*D3")
-		(uuid "8da10c4d-5756-4e34-a8ab-c9faa09467dc")
-	)
-	(segment
-		(start 155.88 103.02)
-		(end 155.88 103.01)
-		(width 0.5)
-		(layer "F.Cu")
-		(net "/*D3")
-		(uuid "bcb41e11-8afb-4b87-8dd8-336805f98662")
-	)
-	(segment
-		(start 155.87 103.01)
-		(end 155.88 103.02)
-		(width 0.5)
-		(layer "F.Cu")
-		(net "/*D3")
-		(uuid "f6fb0006-2ab8-456e-8d61-8a1e70e9a372")
+		(uuid "ba2eb459-3c24-4358-a582-efe46597768d")
 	)
 	(via
-		(at 155.88 103.02)
+		(at 155.88 100.48)
 		(size 1.7)
 		(drill 1)
 		(layers "F.Cu" "B.Cu")
 		(net "/*D3")
-		(uuid "5237b261-d487-4837-b0c0-5f3734f33c3a")
+		(uuid "0ed61c5a-1f40-4960-9edd-37995ee11e49")
 	)
 	(via
 		(at 140.64 85.24)
@@ -6824,28 +6772,20 @@
 		(uuid "60aa97f9-d44c-4d09-bca2-92fcc2e6408c")
 	)
 	(via
-		(at 150.8 103.02)
+		(at 150.8 100.48)
 		(size 1.7)
 		(drill 1)
 		(layers "F.Cu" "B.Cu")
 		(net "/*D3")
-		(uuid "6e25659a-8706-4513-9b18-9d294f9d6bf3")
+		(uuid "b4fe4e3d-c822-4760-948c-86286b1a9206")
 	)
 	(segment
-		(start 158.04 108.56)
-		(end 158.04 103.4)
+		(start 158.04 100.86)
+		(end 158.42 100.48)
 		(width 1.2)
 		(layer "B.Cu")
 		(net "/*D3")
-		(uuid "07f21aad-d59b-4d2d-a059-d3cc7e0caca7")
-	)
-	(segment
-		(start 148.26 85.24)
-		(end 148.26 103.02)
-		(width 1.2)
-		(layer "B.Cu")
-		(net "/*D3")
-		(uuid "1ccaf6a7-945a-4dd6-b32e-1f9370575a42")
+		(uuid "0020bf7f-1cc3-4d93-a45f-6d7c70021fd2")
 	)
 	(segment
 		(start 125.4 82.7)
@@ -6856,20 +6796,28 @@
 		(uuid "4bb579fa-3953-4b5a-a404-821b7f054fa6")
 	)
 	(segment
-		(start 158.42 103.02)
-		(end 155.88 103.02)
+		(start 158.42 100.48)
+		(end 155.88 100.48)
 		(width 1.2)
 		(layer "B.Cu")
 		(net "/*D3")
 		(uuid "6c12492c-3f79-4d84-b5d4-1eabb081278f")
 	)
 	(segment
-		(start 148.26 103.02)
-		(end 150.8 103.02)
+		(start 148.26 100.48)
+		(end 150.8 100.48)
 		(width 1.2)
 		(layer "B.Cu")
 		(net "/*D3")
 		(uuid "7c9ab1d1-e5d2-443e-abba-77732c4d4da0")
+	)
+	(segment
+		(start 148.26 85.24)
+		(end 148.26 100.48)
+		(width 1.2)
+		(layer "B.Cu")
+		(net "/*D3")
+		(uuid "8db6c05d-b0fc-4ecd-834b-8e4c79983989")
 	)
 	(segment
 		(start 125.4 85.24)
@@ -6880,20 +6828,20 @@
 		(uuid "b3d23e26-00a9-4d5e-8ac6-d7d0482a7725")
 	)
 	(segment
-		(start 158.04 103.4)
-		(end 158.42 103.02)
+		(start 158.04 108.56)
+		(end 158.04 100.86)
 		(width 1.2)
 		(layer "B.Cu")
 		(net "/*D3")
-		(uuid "c3d6ecd3-b5ec-4d39-8fe7-ace61dec5adb")
+		(uuid "f73a50de-cfed-4c19-9819-7793ac025323")
 	)
 	(segment
-		(start 130.48 80.16)
-		(end 130.48 75.08)
-		(width 0.5)
+		(start 130.48 75.08)
+		(end 130.48 80.16)
+		(width 1.2)
 		(layer "F.Cu")
 		(net "GND")
-		(uuid "300cdca3-f43b-408d-ba67-d29a540b77d3")
+		(uuid "127e51ab-1ef1-4831-ac42-19822e92d7a3")
 	)
 	(via
 		(at 130.48 80.16)
@@ -6960,14 +6908,6 @@
 		(uuid "2d1d547c-e591-4cd3-a1a8-511a08effd95")
 	)
 	(segment
-		(start 158.42 70)
-		(end 158.42 97.94)
-		(width 1.2)
-		(layer "B.Cu")
-		(net "GND")
-		(uuid "317da09e-1d0b-469b-a9db-eb0c60379875")
-	)
-	(segment
 		(start 102.54 70)
 		(end 102.54 72.42)
 		(width 1.2)
@@ -6990,6 +6930,14 @@
 		(layer "B.Cu")
 		(net "GND")
 		(uuid "45f3bc5c-7883-4e5a-8a18-663491aa3218")
+	)
+	(segment
+		(start 158.42 70)
+		(end 158.42 95.4)
+		(width 1.2)
+		(layer "B.Cu")
+		(net "GND")
+		(uuid "513a2007-bb00-4659-9ac7-d48f7f49b8fc")
 	)
 	(segment
 		(start 110.16 113.06)
@@ -7112,8 +7060,8 @@
 		(uuid "f924f622-d3f4-46da-993b-5948f2f84a0e")
 	)
 	(segment
-		(start 155.88 92.86)
-		(end 155.88 97.94)
+		(start 155.88 90.32)
+		(end 155.88 95.4)
 		(width 1.2)
 		(layer "B.Cu")
 		(net "Net-(D1-A)")
