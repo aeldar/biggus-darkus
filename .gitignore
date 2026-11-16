@@ -1,1 +1,5 @@
 .DS_Store
+
+# restored from skills-lock.json, see README
+/.agents/skills/
+/.claude/skills

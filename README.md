@@ -24,3 +24,15 @@ The app turns game events into serial commands using editable rules. The firmwar
 - App build, run and packaging: [`app/README.md`](app/README.md)
 - Firmware docs: [`firmware/docs/`](firmware/docs/)
 - Elite Dangerous journal format (official): <https://elite-journal.readthedocs.io/en/latest/>
+
+## AI skills
+
+The KiCad skills (BOM, datasheets, EMC, SPICE, part suppliers and others) come from [aklofas/kicad-happy](https://github.com/aklofas/kicad-happy). They are not stored in git; [`skills-lock.json`](skills-lock.json) pins them. To install them into `.agents/skills/`:
+
+```
+pnpx skills experimental_install --frozen-lockfile
+```
+
+## License
+
+MIT — see [LICENSE](LICENSE).
