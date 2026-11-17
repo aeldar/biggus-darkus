@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "// hooks.PreToolUse": "protocol.md and bindings.ts are generated; hand edits get overwritten and fail the golden tests",
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | grep -Eq '/app/(docs/protocol\\.md|ui/src/bindings\\.ts)$' && { echo 'Generated file: do not edit by hand. Regenerate it (see app/docs/architecture.md: gen-docs for protocol.md, UPDATE_BINDINGS=1 cargo test -p bd-app for bindings.ts).' >&2; exit 2; }; exit 0"
+          }
+        ]
+      }
+    ],
+    "// hooks.PostToolUse": "app/AGENTS.md requires cargo fmt before every commit; direnv exec because cargo only exists in the nix dev shell",
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | grep -Eq '/app/.*\\.rs$' && { cd \"$CLAUDE_PROJECT_DIR/app\" && direnv exec . cargo fmt --all; }; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}
